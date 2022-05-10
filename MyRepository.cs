@@ -10,9 +10,14 @@ namespace Console_TelegramBot
     public class MyRepository
     {
         public static ConcurrentDictionary<string, string[]> _dic_variants = new ConcurrentDictionary<string, string[]>();
+        
         public static ConcurrentDictionary<string, string> _dic_answer = new ConcurrentDictionary<string, string>();
 
+        public static ConcurrentDictionary<string, string> _dic_answerPerson = new ConcurrentDictionary<string, string>();
+
         private static Random _rand = new Random();
+
+        private static int currentIssue = -1;
 
         public int id;
 
@@ -73,6 +78,9 @@ namespace Console_TelegramBot
 
         public static int GetIndexCorrectOption(int r)
         {
+            if (r == -1)
+            { return 0; }
+            
             var keys = new List<string>(_dic_variants.Keys);
             
             _dic_answer.TryGetValue(keys[r], out string correctValue);
@@ -95,13 +103,46 @@ namespace Console_TelegramBot
             return keys[r];
         }
 
+
         public static int GetRundom()
         {
             if (_dic_variants.Count == 0)
                 return -1;
 
-            var r = _rand.Next(0, _dic_variants.Count-1);
-            return r;
+            currentIssue = _rand.Next(0, _dic_variants.Count-1);
+            return currentIssue;
+        }
+
+
+        public static int GetCarrentIssuse()
+        {
+            return currentIssue;
+        }
+
+
+        public static void setResponse(int IDRespons)
+        {
+            // пришел какой-то ответ, но если мы не проходили опрос - игнорим.
+            if (currentIssue == -1)
+            { return; }
+            
+            // ответили правильно.
+            if (GetIndexCorrectOption(currentIssue) == IDRespons)
+            {
+                var answer = GetQuestion(currentIssue);
+                // если в таблице ответов он уже был - удаляем вопрос из списка вопросов (чтобы больше не показывался
+                if (_dic_answerPerson.ContainsKey(answer))
+                {
+                    _dic_variants.TryRemove(answer,out string[] val1);
+                    _dic_answer.TryRemove(answer, out string val2);
+                }
+                else
+                {
+                    // если правильный - и еще не было в таблице правильных ответов пользователя - запишем новую строку ответов пользователя.
+                    _dic_answerPerson.TryAdd(answer, answer);
+                }
+
+            }
         }
 
     }
