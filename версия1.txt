@@ -1,0 +1,104 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Exceptions;
+using Telegram.Bot.Types.Enums;
+
+namespace Console_TelegramBot
+{
+    class Program
+    {
+
+        static ITelegramBotClient bot = new TelegramBotClient("TOKEN");
+        const string command_List=
+        @"Список команд:
+        /add <eng> <ru> - Добавление английского слова и его перевод в словарь
+        /get - Получаем случайное английское слово из словаря
+        /check <eng> <ru> - Проверяем правильность перевода английского слова
+        ";
+
+
+        public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
+            // Некоторые действия
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update));
+            var message = update.Message;
+
+            if (update.Type != Telegram.Bot.Types.Enums.UpdateType.Message)
+                return;
+            if (update.Message.Type == MessageType.Sticker)
+            {
+                await botClient.SendTextMessageAsync(message.Chat, update.Message.Sticker.Emoji);
+                return;
+            }
+
+
+
+
+            var argMsg = update.Message.Text.Split(" ");
+            switch (argMsg[0])
+            {
+                case "/start":
+
+
+
+                    await botClient.SendTextMessageAsync(message.From.Id,command_List);
+                    break;
+                case "/get":
+                    await botClient.SendTextMessageAsync(message.From.Id, "get");
+                    break;
+                case "/check":
+                    await botClient.SendTextMessageAsync(message.From.Id, "check");
+                    break;
+            }
+
+
+
+
+            //await botClient.SendTextMessageAsync(message.Chat, update.Message.Text);
+
+
+
+
+                    
+
+        }
+
+        public static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(exception));
+        }
+
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+
+            //var apiKey = System.IO.File.ReadAllText(@"c:\tg.txt");
+            var  apiKey = "5181007101:AAGZ_TEpFLE3SUuc2jfE_8x3qSliH89g8-Q";
+            bot = new TelegramBotClient(apiKey);
+
+            Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
+
+            var cts = new CancellationTokenSource();
+            var cancellationToken = cts.Token;
+            var allowedUpdates = new UpdateType[] { UpdateType.Message };
+            var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = allowedUpdates 
+            };
+            
+            bot.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                receiverOptions,
+                cancellationToken
+            );
+            Console.ReadLine();
+        }
+
+    }
+}
