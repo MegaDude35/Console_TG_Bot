@@ -18,15 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="meeting_saved_chat-59242-377f44 %281%29.txt" />
-    <None Remove="версия1.txt" />
-    <None Remove="версия_03052022.txt" />
-    <None Remove="СоздалиБота_Victorina_032022_bot.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="Telegram.Bot" Version="18.0.0" />
   </ItemGroup>
