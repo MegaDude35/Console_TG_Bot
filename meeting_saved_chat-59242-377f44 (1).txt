@@ -1,10 +1,0 @@
-20:18:36 From  Алексей Ягур  to  Everyone:
-	https://github.com/aapoplavskii/HelpDeskTelegramBot.git
-21:36:18 From  Алексей Ягур  to  Everyone:
-	async Task Main()	{		var apiKey = System.IO.File.ReadAllText(@"C:\\tg.txt");		var bot = new TelegramBotClient(apiKey);			var allowedUpdates = new UpdateType[] { UpdateType.Message };		var receiverOptions = new ReceiverOptions		{			AllowedUpdates = allowedUpdates		};				bot.StartReceiving(UpdateHandler, ErrorHandler, receiverOptions, CancellationToken.None);		Console.Read();	}		void ErrorHandler(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)	{		arg2.Message.Dump();	}		void UpdateHandler(ITelegramBotClient arg1, Update update, CancellationToken arg3)	{		if (update.Message.Type == MessageType.Sticker)		{			update.Message.Sticker.Emoji.Dump();		}		else		{			update.Message.Text.Dump();		}	}
-21:52:03 From  Алексей Ягур  to  Everyone:
-	Ver2:	async Task Main()	{		// Получаем API ключ		var apiKey = System.IO.File.ReadAllText(@"C:\\tg.txt");				// Создаём клиента		var bot = new TelegramBotClient(apiKey);			// Выбираем типы обновлений, которые будем получать (только сообщения от пользователей)		var allowedUpdates = new UpdateType[] { UpdateType.Message };		var receiverOptions = new ReceiverOptions		{			AllowedUpdates = allowedUpdates		};						// Начинаем принимать обновления		bot.StartReceiving(UpdateHandler, ErrorHandler, receiverOptions, CancellationToken.None);		Console.Read();	}		void ErrorHandler(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)	{		arg2.Message.Dump();	}		void UpdateHandler(ITelegramBotClient arg1, Update update, CancellationToken arg3)	{		if (update.Message.Type == MessageType.Sticker)		{			update.Message.Sticker.Emoji.Dump();		}		else		{			update.Message.Text.Dump();		}	}
-21:52:38 From  Алексей Ягур  to  Everyone:
-	https://sendpulse.com/ru/knowledge-base/chatbot/create-telegram-chatbot
-21:58:17 From  Алексей Ягур  to  Everyone:
-	https://otus.ru/polls/40358/
