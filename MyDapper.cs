@@ -47,6 +47,16 @@ namespace Console_TelegramBot
                 return result;
             }
 
+            public static Questions GetQuestion(string Question_Text)
+            {
+                conn.Open();
+                Questions result = conn.Query<Questions>(@"
+                select top(1) *
+                from Questions
+                where Question_Text like '" + Question_Text + "';").FirstOrDefault();
+                conn.Close();
+                return result;
+            }
             public static List<Questions> GetQuestions(int testID)
             {
 
@@ -84,7 +94,7 @@ namespace Console_TelegramBot
 
             public static int SaveTest(List<Questions> questions, string testName, short TimeToTake, long TG_ID)
             {
-
+                conn.Open();
                 int testID = conn.ExecuteScalar<int>(@"
                     insert into Tests(Name, Time_to_Take, Author_ID)
                     output inserted.ID
@@ -106,6 +116,24 @@ namespace Console_TelegramBot
                                 question.Question_Ball
                             });
                 }
+                conn.Close();
+                return result;
+            }
+
+            public static int SaveAnswer(string TestKey, long TG_ID, string Question_Text)
+            {
+                int result;
+                conn.Open();
+                result = conn.Execute(@"
+                    insert into Answers(Test_Key_ID, User_ID, Question_ID, Try
+                    values (@Test_Key_ID, @User_ID, @Question_ID, DEFAULT);",
+                    new
+                    {
+                        Test_Key_ID = GetTestKey(TestKey).Id,
+                        User_ID = GetUser(TG_ID).Id,
+                        Question_ID = GetQuestion(Question_Text).Id
+                    });
+                conn.Close();
                 return result;
             }
 
@@ -115,7 +143,7 @@ namespace Console_TelegramBot
                 System.Console.WriteLine(conn.Execute(@"
                     insert into Users(Firstname, Lastname, TG_ID, Author)
                     values (@Firstname, @Lastname, @TG_ID, DEFAULT);",
-                    new { Firstname, Lastname, TG_ID}));
+                    new { Firstname, Lastname, TG_ID }));
                 conn.Close();
             }
         }

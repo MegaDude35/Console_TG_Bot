@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Console_TelegramBot
 {
@@ -11,9 +12,7 @@ namespace Console_TelegramBot
 
         private readonly static Random _rand = new();
 
-        public static bool QuestionsEmpty => _dic_variants.Count == 0;
-
-        public static void StartTest(string key)
+        public static bool StartTest(string key)
         {
             var _variants = MyDapper.GetQuestions(MyDapper.GetTestKey(key).IdTest);
             List<string> strings = new(_variants.Count);
@@ -33,14 +32,11 @@ namespace Console_TelegramBot
                 _dic_answerPerson.TryAdd(count, rightAnswer);
                 _dic_variants.TryAdd(count++, strings.ToArray());
             }
+            return count > 0;
         }
 
         public static int GetIndexCorrectOption(int r)
         {
-            if (r == -1)
-            {
-                return r;
-            }
 
             if (_dic_variants.TryGetValue(r, out string[] value))
             {
@@ -60,7 +56,7 @@ namespace Console_TelegramBot
 
         public static IEnumerable<string> GetVariant(int i) => _dic_variants[i][1..];
 
-        public static int GetRandom() => _dic_variants.Count == 0 ? -1 : _rand.Next(0, _dic_variants.Count - 1);
+        public static int GetRandom() => _rand.Next(0, _dic_variants.Count + 1);
 
         public static bool GetAuthor(long TG_ID) => MyDapper.GetUser(TG_ID).Author;
 
@@ -81,5 +77,10 @@ namespace Console_TelegramBot
         public static bool CheckAddUser(long TG_ID) => MyDapper.GetUser(TG_ID).Id != 0;
 
         public static void AddUser(long TG_ID, string Firstname, string Lastname) => MyDapper.AddUser(TG_ID, Firstname, Lastname);
+
+        public static string RandomString(int length = 64) => new(
+            Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", length)
+                      .Select(s => s[_rand.Next(s.Length)])
+                      .ToArray());
     }
 }

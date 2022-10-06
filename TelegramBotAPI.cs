@@ -7,8 +7,6 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Polling;
-using Microsoft.VisualBasic;
-using System.IO.Pipes;
 
 namespace Console_TelegramBot
 {
@@ -108,7 +106,7 @@ namespace Console_TelegramBot
                     {
                         int r = MyRepository.GetRandom();
 
-                        if (r != -1)
+                        if (r != 0)
                         {
                             await botClient.SendPollAsync(
                             update.Message.Chat.Id,
@@ -120,15 +118,11 @@ namespace Console_TelegramBot
                             MyRepository.GetIndexCorrectOption(r),
                             cancellationToken: cancellationToken
                             );
-                            await botClient.SendTextMessageAsync(update.Message.Chat, "Что-то пошло не так.", cancellationToken: cancellationToken);
                         }
                         else
                         {
-                            if (MyRepository.QuestionsEmpty)
-                            {
-                                // уже прошли все вопросы, которые были.
-                                await botClient.SendTextMessageAsync(update.Message.Chat, "Тест окончен.", cancellationToken: cancellationToken);
-                            }
+                            // уже прошли все вопросы, которые были.
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "Введите ключ для тестирования и я посмотрю что у меня есть для вас.", cancellationToken: cancellationToken);
                         }
                         break;
                     }
@@ -156,7 +150,17 @@ namespace Console_TelegramBot
                     }
                 default:
                     {
-                        await botClient.SendTextMessageAsync(update.Message.Chat, "Некорректная фраза. Выберите вариант, либо не нагружайте меня", cancellationToken: cancellationToken);
+                        if (update.Message.Text.Length == 64)
+                        {
+                            if (!MyRepository.StartTest(update.Message.Text))
+                            {
+                                await botClient.SendTextMessageAsync(update.Message.Chat, "Подобный ключ не найден. Повторите попытку.", cancellationToken: cancellationToken);
+                            }
+                        }
+                        else
+                        {
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "Некорректная фраза. Выберите вариант, либо не нагружайте меня", cancellationToken: cancellationToken);
+                        }
                         break;
                     }
             }
@@ -179,13 +183,13 @@ namespace Console_TelegramBot
             Console.WriteLine(
                 MyRepository.SaveTest(
                     AikenParser.ParseQuestions(directoryPath + fileName),
-                    fileName.Remove(fileName.LastIndexOf('.')),
+                    fileName,
                     60,
                     chatId));
             await botClient.SendTextMessageAsync(chatId, "OK. Ваш файл успешно сохранён.");
         }
 
-        private static async Task<string> GetJson(Exception obj)
+    /*    private static async void GetJson(Exception obj)
         {
             string json;
             using (var stream = new MemoryStream())
@@ -196,6 +200,6 @@ namespace Console_TelegramBot
                 json = await reader.ReadToEndAsync();
             }
             return json;
-        }
+        }*/
     }
 }
