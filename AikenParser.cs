@@ -36,16 +36,18 @@ namespace Console_TelegramBot
                     {
                         Question_Ball = strings[i][0] == '=' ? 1 : 0,
                         Question_Text = strings[i][0] == '=' ? strings[i][4..] : strings[i][3..],
-                        Question_Group = questionGroup[i]
+                        Question_Group = questionGroup[i],
+                        Question_Type = 1
                     });
                 }
                 else
                 {
                     questions.Add(new Models.Questions
                     {
-                        Question_Ball = -1,
+                        Question_Ball = 0,
                         Question_Text = strings[i],
-                        Question_Group = questionGroup[i]
+                        Question_Group = questionGroup[i],
+                        Question_Type = 1
                     });
                 }
             }

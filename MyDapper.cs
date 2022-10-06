@@ -30,7 +30,7 @@ namespace Console_TelegramBot
                 select top(1) *
                 from Tests
                 where ID = @testID;",
-                    new { testID }).FirstOrDefault();
+                new { testID }).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -41,7 +41,8 @@ namespace Console_TelegramBot
                 Users result = conn.Query<Users>(@"
                 select top(1) *
                 from Users
-                where TG_ID = @TG_ID;", new { TG_ID }).FirstOrDefault();
+                where TG_ID = @TG_ID;",
+                new { TG_ID }).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -54,34 +55,9 @@ namespace Console_TelegramBot
                 select *
                 from Questions
                 where Test_Id = @testID
-                order by Question_Group asc;", new { testID }).ToList();
+                order by Question_Group asc;",
+                new { testID }).ToList();
                 conn.Close();
-                return result;
-            }
-
-            public static int SaveTest(List<Questions> questions, string testName, short TimeToTake, long TG_ID)
-            {
-
-                int testID = conn.ExecuteScalar<int>(@"
-                    insert into Tests(Name, Time_to_Take, AuthorID)
-                    output inserted.ID
-                    values(@testName, @TimeToTake, @AuthorID);",
-                        new { testName, TimeToTake, GetUser(TG_ID).Id });
-
-                int result = 0;
-                foreach (Questions question in questions)
-                {
-                    result += conn.Execute(@"
-                    insert into Questions(Id_Test, Question_Group, Question_Text, Question_Ball)
-                    values (@testID, @Question_Group, @Question_Text, @Question_Ball);",
-                            new
-                            {
-                                testID,
-                                question.Question_Group,
-                                question.Question_Text,
-                                question.Question_Ball
-                            });
-                }
                 return result;
             }
 
@@ -92,17 +68,55 @@ namespace Console_TelegramBot
                 List<Tests> tests = conn.Query<Tests>(@"
                 select *
                 from Tests
-                join Test_Keys on Tests.ID = Test_Keys.Id_Test
-                join Answers on Answers.IdTest_Key = Test_Keys.ID
-                join Users on Users.ID = Answers.Id_User
+                join Test_Keys on Tests.ID = Test_Keys.Test_ID
+                join Answers on Answers.Test_Key_ID = Test_Keys.ID
+                join Users on Users.ID = Answers.User_ID
                 where Users.TG_ID = @TG_ID
-                group by Answers.IdTest_Key;", new { TG_ID }).ToList();
+                group by Answers.Test_Key_ID;",
+                new { TG_ID }).ToList();
                 conn.Close();
                 foreach (Tests test in tests)
                 {
                     result.Add(test.Id, test.Name);
                 }
                 return result;
+            }
+
+            public static int SaveTest(List<Questions> questions, string testName, short TimeToTake, long TG_ID)
+            {
+
+                int testID = conn.ExecuteScalar<int>(@"
+                    insert into Tests(Name, Time_to_Take, Author_ID)
+                    output inserted.ID
+                    values(@testName, @TimeToTake, @Id);",
+                        new { testName, TimeToTake, GetUser(TG_ID).Id });
+
+                int result = 0;
+                foreach (Questions question in questions)
+                {
+                    result += conn.Execute(@"
+                    insert into Questions(Test_ID, Question_Group, Question_Type, Question_Text, Question_Ball)
+                    values (@testID, @Question_Group, @Question_Type, @Question_Text, @Question_Ball);",
+                            new
+                            {
+                                testID,
+                                question.Question_Group,
+                                question.Question_Type,
+                                question.Question_Text,
+                                question.Question_Ball
+                            });
+                }
+                return result;
+            }
+
+            public static void AddUser(long TG_ID, string Firstname, string Lastname)
+            {
+                conn.Open();
+                System.Console.WriteLine(conn.Execute(@"
+                    insert into Users(Firstname, Lastname, TG_ID, Author)
+                    values (@Firstname, @Lastname, @TG_ID, DEFAULT);",
+                    new { Firstname, Lastname, TG_ID}));
+                conn.Close();
             }
         }
     }

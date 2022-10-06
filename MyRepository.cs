@@ -11,12 +11,12 @@ namespace Console_TelegramBot
 
         private readonly static Random _rand = new();
 
-        public static bool AnswersEmpty => _dic_answerPerson.Count == 0;
+        public static bool QuestionsEmpty => _dic_variants.Count == 0;
 
-        public static bool StartTest(string key)
+        public static void StartTest(string key)
         {
             var _variants = MyDapper.GetQuestions(MyDapper.GetTestKey(key).IdTest);
-            List<string> strings = new();
+            List<string> strings = new(_variants.Count);
             string rightAnswer = string.Empty;
             int count = 0;
             foreach (var variant in _variants)
@@ -32,9 +32,7 @@ namespace Console_TelegramBot
                 }
                 _dic_answerPerson.TryAdd(count, rightAnswer);
                 _dic_variants.TryAdd(count++, strings.ToArray());
-                return true;
             }
-            return false;
         }
 
         public static int GetIndexCorrectOption(int r)
@@ -64,6 +62,8 @@ namespace Console_TelegramBot
 
         public static int GetRandom() => _dic_variants.Count == 0 ? -1 : _rand.Next(0, _dic_variants.Count - 1);
 
+        public static bool GetAuthor(long TG_ID) => MyDapper.GetUser(TG_ID).Author;
+
         public static void SetResponse(int IDResponse)
         {
             // если вариант ответа есть и он правильный
@@ -74,8 +74,12 @@ namespace Console_TelegramBot
             }
         }
 
-        public static void SaveTest(List<Models.Questions> questions, string testName, short TimeToTake, long TG_ID) => MyDapper.SaveTest(questions, testName, TimeToTake, TG_ID);
+        public static int SaveTest(List<Models.Questions> questions, string testName, short TimeToTake, long TG_ID) => MyDapper.SaveTest(questions, testName, TimeToTake, TG_ID);
 
         public static Dictionary<int, string> ImportResults(long TG_ID) => MyDapper.GetCompletedTests(TG_ID);
+
+        public static bool CheckAddUser(long TG_ID) => MyDapper.GetUser(TG_ID).Id != 0;
+
+        public static void AddUser(long TG_ID, string Firstname, string Lastname) => MyDapper.AddUser(TG_ID, Firstname, Lastname);
     }
 }
