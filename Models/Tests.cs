@@ -2,9 +2,9 @@
 {
     public struct Tests
     {
-        public int Id { set; get; }
+        public int ID { set; get; }
         public string Name { set; get; }
-        public short TimeToTake { get; set; }
-        public long AuthorId { set; get; }
+        public short Time_To_Take { get; set; }
+        public long AuthorID { set; get; }
     }
 }

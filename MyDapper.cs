@@ -8,16 +8,16 @@ namespace Console_TelegramBot
 {
     public partial class MyRepository
     {
-        public static class MyDapper
+        private static class MyDapper
         {
             static readonly SqlConnection conn = new(Properties.Resources.ConnectionString);
             public static TestKeys GetTestKey(string key)
             {
                 conn.Open();
                 TestKeys result = conn.Query<TestKeys>(@"
-                select top(1) *
+                select top 1 *
                 from Test_Keys
-                where Test_Key like '" + key + "';").FirstOrDefault();
+                where Test_Key = @key;", new {key}).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -27,7 +27,7 @@ namespace Console_TelegramBot
 
                 conn.Open();
                 Tests result = conn.Query<Tests>(@"
-                select top(1) *
+                select top 1 *
                 from Tests
                 where ID = @testID;",
                 new { testID }).FirstOrDefault();
@@ -35,11 +35,20 @@ namespace Console_TelegramBot
                 return result;
             }
 
+            public static List<Tests> GetTests()
+            {
+                conn.Open();
+                List<Tests> result = conn.Query<Tests>(@"
+                select *
+                from Tests;").ToList();
+                conn.Close();
+                return result;
+            }
             public static Users GetUser(long TG_ID)
             {
                 conn.Open();
                 Users result = conn.Query<Users>(@"
-                select top(1) *
+                select top 1 *
                 from Users
                 where TG_ID = @TG_ID;",
                 new { TG_ID }).FirstOrDefault();
@@ -51,7 +60,7 @@ namespace Console_TelegramBot
             {
                 conn.Open();
                 Questions result = conn.Query<Questions>(@"
-                select top(1) *
+                select top 1 *
                 from Questions
                 where Question_Text like '" + Question_Text + "';").FirstOrDefault();
                 conn.Close();
@@ -87,7 +96,7 @@ namespace Console_TelegramBot
                 conn.Close();
                 foreach (Tests test in tests)
                 {
-                    result.Add(test.Id, test.Name);
+                    result.Add(test.ID, test.Name);
                 }
                 return result;
             }
@@ -99,7 +108,7 @@ namespace Console_TelegramBot
                     insert into Tests(Name, Time_to_Take, Author_ID)
                     output inserted.ID
                     values(@testName, @TimeToTake, @Id);",
-                        new { testName, TimeToTake, GetUser(TG_ID).Id });
+                        new { testName, TimeToTake, GetUser(TG_ID).ID });
 
                 int result = 0;
                 foreach (Questions question in questions)
@@ -129,9 +138,9 @@ namespace Console_TelegramBot
                     values (@Test_Key_ID, @User_ID, @Question_ID, DEFAULT);",
                     new
                     {
-                        Test_Key_ID = GetTestKey(TestKey).Id,
-                        User_ID = GetUser(TG_ID).Id,
-                        Question_ID = GetQuestion(Question_Text).Id
+                        Test_Key_ID = GetTestKey(TestKey).ID,
+                        User_ID = GetUser(TG_ID).ID,
+                        Question_ID = GetQuestion(Question_Text).ID
                     });
                 conn.Close();
                 return result;

@@ -7,17 +7,19 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Polling;
+using System.Collections.Generic;
 
 namespace Console_TelegramBot
 {
     class TelegramBotAPI
     {
+        private readonly static Dictionary<long, MyRepository> testUsers = new();
         public TelegramBotAPI()
         {
             ITelegramBotClient bot = new TelegramBotClient(Properties.Resources.TGBotApiKey);
             Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
-            bot.StartReceiving(
+            bot.    (
                 HandleUpdateAsync,
                 HandleErrorAsync,
                 new ReceiverOptions()
@@ -33,33 +35,33 @@ namespace Console_TelegramBot
         }
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Console.WriteLine(update.Message.Text);
             if (update.Type == UpdateType.PollAnswer)
             {
-                MyRepository.SetResponse(update.PollAnswer.OptionIds[0]);
+                testUsers[update.Message.Chat.Id].SetResponse(update.PollAnswer.OptionIds[0]);
                 return;
             }
 
             if (update.Message.Type == MessageType.Document)
             {
-                SaveFile(botClient, update.Message.Document.FileName, update.Message.Document.FileId, update.Message.Chat.Id);
+                if (MyRepository.GetAuthor(update.Message.Chat.Id))
+                {
+                    SaveFile(botClient, update.Message.Document.FileName, update.Message.Document.FileId, update.Message.Chat.Id);
+                }
+                else
+                {
+                    await botClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId, cancellationToken);
+                    await botClient.SendTextMessageAsync(update.Message.Chat, "У вас нет прав на загрузку файла.\nЕсли вы считаете что это неправильно, свяжитесь с администратором", cancellationToken: cancellationToken);
+
+                }
                 return;
             }
 
-            if (update.Message.Type == MessageType.Sticker)
+            if (update.Message.Type != MessageType.Text)
             {
-                await botClient.SendTextMessageAsync(
-                    update.Message.Chat,
-                    update.Message.Sticker.Emoji,
-                    cancellationToken: cancellationToken);
                 return;
             }
 
-            if (update.Message.Text is null)
-            {
-                return;
-            }
-
+            Console.WriteLine(update.Message.Text);
             switch (update.Message.Text)
             {
                 case "/start":
@@ -76,24 +78,22 @@ namespace Console_TelegramBot
                         "Привет, что делаем?",
                         replyMarkup:
                         MyRepository.GetAuthor(update.Message.Chat.Id) ?
-                        new ReplyKeyboardMarkup(new[]
-                        {
+                        new ReplyKeyboardMarkup(
                             new KeyboardButton[]
                             {
-                                "Добавить тест", "Запустить тест", "Посмотреть результаты"
+                                "Добавить тест", "Запланировать тест", "Посмотреть результаты"
                             }
-                        })
+                        )
                         {
                             ResizeKeyboard = true
                         }
                         :
-                        new ReplyKeyboardMarkup(new[]
-                        {
+                        new ReplyKeyboardMarkup(
                             new KeyboardButton[]
                             {
                                 "Запустить тест", "Посмотреть результаты"
                             }
-                        })
+                        )
                         {
                             ResizeKeyboard = true
                         },
@@ -104,26 +104,11 @@ namespace Console_TelegramBot
 
                 case "Запустить тест":
                     {
-                        int r = MyRepository.GetRandom();
+                        break;
+                    }
+                case "Запланировать тест":
+                    {
 
-                        if (r != 0)
-                        {
-                            await botClient.SendPollAsync(
-                            update.Message.Chat.Id,
-                            MyRepository.GetQuestion(r),
-                            MyRepository.GetVariant(r),
-                            false,
-                            PollType.Quiz,
-                            false,
-                            MyRepository.GetIndexCorrectOption(r),
-                            cancellationToken: cancellationToken
-                            );
-                        }
-                        else
-                        {
-                            // уже прошли все вопросы, которые были.
-                            await botClient.SendTextMessageAsync(update.Message.Chat, "Введите ключ для тестирования и я посмотрю что у меня есть для вас.", cancellationToken: cancellationToken);
-                        }
                         break;
                     }
                 case "Добавить тест":
@@ -131,9 +116,11 @@ namespace Console_TelegramBot
                         if (!MyRepository.GetAuthor(update.Message.Chat.Id))
                         {
                             await botClient.SendTextMessageAsync(update.Message.Chat, "Данный функционал недоступен.\nЕсли вы считаете что это неправильно, свяжитесь с администратором", cancellationToken: cancellationToken);
-                            break;
                         }
-                        await botClient.SendTextMessageAsync(update.Message.Chat, "Отправьте мне файл в формате Aiken для загрузки вопросов", cancellationToken: cancellationToken);
+                        else
+                        {
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "Отправьте мне файл в формате Aiken для загрузки вопросов", cancellationToken: cancellationToken);
+                        }
                         break;
                     }
                 case "Посмотреть результаты":
@@ -150,12 +137,13 @@ namespace Console_TelegramBot
                     }
                 default:
                     {
-                        if (update.Message.Text.Length == 64)
+                        if (update.Message.Text.Length == 32)
                         {
-                            if (!MyRepository.StartTest(update.Message.Text))
+                            if (!testUsers.ContainsKey(update.Message.Chat.Id))
                             {
-                                await botClient.SendTextMessageAsync(update.Message.Chat, "Подобный ключ не найден. Повторите попытку.", cancellationToken: cancellationToken);
+                                testUsers.Add(update.Message.Chat.Id, new MyRepository());
                             }
+                            StartTest(botClient, testUsers[update.Message.Chat.Id], update.Message, cancellationToken);
                         }
                         else
                         {
@@ -171,7 +159,7 @@ namespace Console_TelegramBot
             Console.WriteLine(exception.InnerException.ToString() + ' ' + exception.Message);
         }
 
-        private static async void SaveFile(ITelegramBotClient botClient,string fileName, string fileId, long chatId)
+        private static async void SaveFile(ITelegramBotClient botClient, string fileName, string fileId, long chatId)
         {
             string directoryPath = Directory.CreateDirectory($"files\\{chatId}\\").FullName;   //Создаём папку и получаем её путь
 
@@ -189,17 +177,45 @@ namespace Console_TelegramBot
             await botClient.SendTextMessageAsync(chatId, "OK. Ваш файл успешно сохранён.");
         }
 
-    /*    private static async void GetJson(Exception obj)
+        private static async void StartTest(ITelegramBotClient botClient, MyRepository user, Message message, CancellationToken cancellationToken)
         {
-            string json;
-            using (var stream = new MemoryStream())
+            if (!user.StartTest(message.Text))
             {
-                await System.Text.Json.JsonSerializer.SerializeAsync(stream, obj);
-                stream.Position = 0;
-                using var reader = new StreamReader(stream);
-                json = await reader.ReadToEndAsync();
+                await botClient.SendTextMessageAsync(message.Chat, "Тестов по данному ключу не найдено.\nПовторите попытку.", cancellationToken: cancellationToken);
+                return;
             }
-            return json;
-        }*/
+            int r = user.GetRandom();
+
+            if (r != -1)
+            {
+                await botClient.SendPollAsync(
+                message.Chat.Id,
+                user.GetQuestion(r),
+                user.GetVariant(r),
+                false,
+                PollType.Quiz,
+                false,
+                user.GetIndexCorrectOption(r),
+                cancellationToken: cancellationToken
+                );
+            }
+            else
+            {
+                // уже прошли все вопросы, которые были.
+                await botClient.SendTextMessageAsync(message.Chat, "По данному ключу тест завершён.", cancellationToken: cancellationToken);
+            }
+        }
+        /*    private static async void GetJson(Exception obj)
+            {
+                string json;
+                using (var stream = new MemoryStream())
+                {
+                    await System.Text.Json.JsonSerializer.SerializeAsync(stream, obj);
+                    stream.Position = 0;
+                    using var reader = new StreamReader(stream);
+                    json = await reader.ReadToEndAsync();
+                }
+                return json;
+            }*/
     }
 }

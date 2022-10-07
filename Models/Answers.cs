@@ -2,10 +2,10 @@
 {
     public struct Answers
     {
-        public int Id { set; get; }
-        public int IdTestKey { set; get; }
-        public int IdUser { set; get; }
-        public int IdQuestion { set; get; }
+        public int ID { set; get; }
+        public int Test_Key_ID { set; get; }
+        public int User_ID { set; get; }
+        public int Question_ID { set; get; }
         public byte Try { set; get; }
     }
 }

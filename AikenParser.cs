@@ -7,7 +7,7 @@ namespace Console_TelegramBot
     
         public static List<Models.Questions> ParseQuestions(string filePath)
         {
-            byte groupCount = 1;
+            byte groupCount = 0;
             List<Models.Questions> questions = new();
             List<string> strings = new();
             List<byte> questionGroup = new();
