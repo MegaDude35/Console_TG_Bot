@@ -17,7 +17,7 @@ namespace Console_TelegramBot
                 TestKeys result = conn.Query<TestKeys>(@"
                 select top 1 *
                 from Test_Keys
-                where Test_Key = @key;", new {key}).FirstOrDefault();
+                where Test_Key like @key;", new { key }).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -62,7 +62,7 @@ namespace Console_TelegramBot
                 Questions result = conn.Query<Questions>(@"
                 select top 1 *
                 from Questions
-                where Question_Text like '" + Question_Text + "';").FirstOrDefault();
+                where Question_Text like @Question_Text;", new {Question_Text}).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -89,7 +89,7 @@ namespace Console_TelegramBot
                 from Tests
                 join Test_Keys on Tests.ID = Test_Keys.Test_ID
                 join Answers on Answers.Test_Key_ID = Test_Keys.ID
-                join Users on Users.ID = Answers.User_ID
+                join Users on Users.TG_ID = Answers.User_ID
                 where Users.TG_ID = @TG_ID
                 group by Answers.Test_Key_ID;",
                 new { TG_ID }).ToList();
@@ -107,8 +107,8 @@ namespace Console_TelegramBot
                 int testID = conn.ExecuteScalar<int>(@"
                     insert into Tests(Name, Time_to_Take, Author_ID)
                     output inserted.ID
-                    values(@testName, @TimeToTake, @Id);",
-                        new { testName, TimeToTake, GetUser(TG_ID).ID });
+                    values(@testName, @TimeToTake, @TG_ID);",
+                        new { testName, TimeToTake, TG_ID });
 
                 int result = 0;
                 foreach (Questions question in questions)
@@ -129,18 +129,20 @@ namespace Console_TelegramBot
                 return result;
             }
 
-            public static int SaveAnswer(string TestKey, long TG_ID, string Question_Text)
+            public static int SaveAnswer(string TestKey, long TG_ID, string Question_Text, int Try = 1)
             {
-                int result;
+                var Test_Key_ID = GetTestKey(TestKey).ID;
+                var Question_ID = GetQuestion(Question_Text).ID;
                 conn.Open();
-                result = conn.Execute(@"
-                    insert into Answers(Test_Key_ID, User_ID, Question_ID, Try
-                    values (@Test_Key_ID, @User_ID, @Question_ID, DEFAULT);",
+                int result = conn.Execute(@"
+                    insert into Answers(Test_Key_ID, User_ID, Question_ID, Try)
+                    values (@Test_Key_ID, @TG_ID, @Question_ID, @Try);",
                     new
                     {
-                        Test_Key_ID = GetTestKey(TestKey).ID,
-                        User_ID = GetUser(TG_ID).ID,
-                        Question_ID = GetQuestion(Question_Text).ID
+                        Test_Key_ID,
+                        TG_ID,
+                        Question_ID,
+                        Try
                     });
                 conn.Close();
                 return result;
