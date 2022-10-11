@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace Console_TelegramBot
         private readonly static Dictionary<long, MyRepository> testUsers = new();
         public TelegramBotAPI()
         {
-            ITelegramBotClient bot = new TelegramBotClient(ConfigurationManager.AppSettings["BotKey"]);
+            ITelegramBotClient bot = new TelegramBotClient(System.Configuration.ConfigurationManager.AppSettings["BotKey"]);
             Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
             bot.StartReceiving(
@@ -134,7 +133,7 @@ namespace Console_TelegramBot
                     }
                 case "Посмотреть результаты":
                     {
-                        return;
+                        return; //TODO
                         var tmp = MyRepository.ImportResults(update.Message.Chat.Id);
                         System.Text.StringBuilder sb = new();
                         foreach (var item in tmp)

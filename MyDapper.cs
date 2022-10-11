@@ -10,7 +10,6 @@ namespace Console_TelegramBot
     {
         private static class MyDapper
         {
-            //TODO заменить на дженерики (шаблоны)
             static readonly SqlConnection conn = new(System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString);
             public static TestKeys GetTestKey(string key)
             {

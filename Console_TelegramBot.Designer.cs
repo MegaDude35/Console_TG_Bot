@@ -13,7 +13,7 @@ namespace Console_TelegramBot {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.3.0.0")]
-    internal sealed partial class Console_TelegramBot : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class Console_TelegramBot : global::System.Configuration.ApplicationSettingsBase {
         
         private static Console_TelegramBot defaultInstance = ((Console_TelegramBot)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Console_TelegramBot())));
         

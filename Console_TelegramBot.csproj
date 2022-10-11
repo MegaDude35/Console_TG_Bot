@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <None Update="Console_TelegramBot.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Console_TelegramBot.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
