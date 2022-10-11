@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -16,7 +16,7 @@ namespace Console_TelegramBot
         private readonly static Dictionary<long, MyRepository> testUsers = new();
         public TelegramBotAPI()
         {
-            ITelegramBotClient bot = new TelegramBotClient(Properties.Resources.TGBotApiKey);
+            ITelegramBotClient bot = new TelegramBotClient(ConfigurationManager.AppSettings["BotKey"]);
             Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
             bot.StartReceiving(
@@ -170,10 +170,10 @@ namespace Console_TelegramBot
 
         private static async void SaveFile(ITelegramBotClient botClient, string fileName, string fileId, long chatId)
         {
-            string directoryPath = Directory.CreateDirectory($"files\\{chatId}\\").FullName;   //Создаём папку и получаем её путь
+            string directoryPath = System.IO.Directory.CreateDirectory($"files\\{chatId}\\").FullName;   //Создаём папку и получаем её путь
 
-            Telegram.Bot.Types.File file = await botClient.GetFileAsync(fileId);
-            FileStream fs = new($"{directoryPath}{fileName}", FileMode.Create);
+            File file = await botClient.GetFileAsync(fileId);
+            System.IO.FileStream fs = new($"{directoryPath}{fileName}", System.IO.FileMode.Create);
             await botClient.DownloadFileAsync(file.FilePath, fs);
             fs.Close();
             fs.Dispose();
@@ -207,7 +207,6 @@ namespace Console_TelegramBot
                 false,
                 PollType.Quiz,
                 false,
-                user.GetIndexCorrectOption(r),
                 cancellationToken: cancellationToken
                 );
             }

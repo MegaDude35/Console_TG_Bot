@@ -10,14 +10,16 @@ namespace Console_TelegramBot
     {
         private static class MyDapper
         {
-            static readonly SqlConnection conn = new(Properties.Resources.ConnectionString);
+            //TODO заменить на дженерики (шаблоны)
+            static readonly SqlConnection conn = new(System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString);
             public static TestKeys GetTestKey(string key)
             {
                 conn.Open();
                 TestKeys result = conn.Query<TestKeys>(@"
                 select top 1 *
                 from Test_Keys
-                where Test_Key like @key;", new { key }).FirstOrDefault();
+                where Test_Key like @key;",
+                new { key }).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -62,7 +64,7 @@ namespace Console_TelegramBot
                 Questions result = conn.Query<Questions>(@"
                 select top 1 *
                 from Questions
-                where Question_Text like @Question_Text;", new {Question_Text}).FirstOrDefault();
+                where Question_Text like @Question_Text;", new { Question_Text }).FirstOrDefault();
                 conn.Close();
                 return result;
             }
@@ -151,10 +153,21 @@ namespace Console_TelegramBot
             public static void AddUser(long TG_ID, string Firstname, string Lastname)
             {
                 conn.Open();
-                System.Console.WriteLine(conn.Execute(@"
+                conn.Execute(@"
                     insert into Users(Firstname, Lastname, TG_ID, Author)
                     values (@Firstname, @Lastname, @TG_ID, DEFAULT);",
-                    new { Firstname, Lastname, TG_ID }));
+                    new { Firstname, Lastname, TG_ID });
+                conn.Close();
+            }
+
+            public static void SetAuthor(long TG_ID, bool flag = true)
+            {
+                conn.Open();
+                conn.Execute(@"
+                alter table Users
+                set Author = @flag
+                where TG_ID = @TG_ID;",
+                new { flag, TG_ID });
                 conn.Close();
             }
         }

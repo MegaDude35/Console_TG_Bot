@@ -9,7 +9,10 @@ namespace Console_TelegramBot
         {
 
             new TelegramBotAPI();
-            while (Console.ReadKey().Key != ConsoleKey.Q) ;
+            while (Console.ReadKey().Key != ConsoleKey.Q)
+            {
+                //MyRepository.SetAuthor(Convert.ToInt64(Console.ReadLine()));
+            }
         }
     }
 }
