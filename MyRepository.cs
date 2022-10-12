@@ -51,8 +51,28 @@ namespace Console_TelegramBot
 
         public static int SaveTest(List<Models.Questions> questions, string testName, short TimeToTake, long TG_ID) => MyDapper.SaveTest(questions, testName, TimeToTake, TG_ID);
 
-        public static Dictionary<int, string> ImportResults(long TG_ID) => MyDapper.GetCompletedTests(TG_ID);
-
+        public static string GetResults(long TG_ID)
+        {
+            var tmp = MyDapper.GetCompletedTests(TG_ID);
+            System.Text.StringBuilder sb = new();
+            foreach (var item in tmp)
+            {
+                sb.Append(item.ID + '\t');
+                sb.Append(item.Name + '\n');
+            }
+            return sb.ToString();
+        }
+        public static string GetTestResult(long TG_ID, int test_key)
+        {
+            var tmp = MyDapper.GetTestResult(TG_ID, test_key);
+            System.Text.StringBuilder sb = new();
+            foreach (var item in tmp)
+            {
+                sb.Append(item.Question_Text + '\t');
+                sb.Append(item.Question_Ball + '\n');
+            }
+            return sb.ToString();
+        }
         public static bool CheckAddUser(long TG_ID) => MyDapper.GetUser(TG_ID).TG_ID != 0;
 
         public static void AddUser(long TG_ID, string Firstname, string Lastname) => MyDapper.AddUser(TG_ID, Firstname, Lastname);

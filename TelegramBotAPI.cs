@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Polling;
+using Newtonsoft.Json;
 
 namespace Console_TelegramBot
 {
@@ -66,7 +66,8 @@ namespace Console_TelegramBot
             }
 
             Console.WriteLine(update.Message.Text);
-            switch (update.Message.Text)
+            var command = update.Message.Text.Split(' ');
+            switch (command[0])
             {
                 case "/start":
                     {
@@ -80,46 +81,43 @@ namespace Console_TelegramBot
                         await botClient.SendTextMessageAsync(
                         update.Message.Chat.Id,
                         "Привет, что делаем?",
-                        replyMarkup:
-                        MyRepository.GetAuthor(update.Message.Chat.Id) ?
-                        new ReplyKeyboardMarkup(
-                            new KeyboardButton[]
-                            {
-                                "Добавить тест", "Запланировать тест", "Посмотреть результаты"
-                            }
-                        )
-                        {
-                            ResizeKeyboard = true
-                        }
-                        :
-                        new ReplyKeyboardMarkup(
-                            new KeyboardButton[]
-                            {
-                                "Запустить тест", "Посмотреть результаты"
-                            }
-                        )
-                        {
-                            ResizeKeyboard = true
-                        },
                         cancellationToken: cancellationToken
                         );
                         break;
                     }
-
-                case "Запустить тест":
+                case "/get_results":
+                    {
+                        if (command.Length == 2)
+                        {
+                            if (int.TryParse(command[1], out int Test_ID))
+                            {
+                                await botClient.SendTextMessageAsync(update.Message.Chat, "Ваш результат по тесту:\n" + MyRepository.GetTestResult(update.Message.Chat.Id, Test_ID), cancellationToken: cancellationToken);
+                            }
+                            else
+                            {
+                                await botClient.SendTextMessageAsync(update.Message.Chat, "Неопознанная команда. Введитке команду, либо не нагружайте меня", cancellationToken: cancellationToken);
+                            }
+                        }
+                        break;
+                    }
+                case "/start_test":
                     {
                         await botClient.SendTextMessageAsync(update.Message.Chat, "Отправьте мне ключ и я постараюсь найти ваш тест.", cancellationToken: cancellationToken);
                         break;
                     }
-                case "Запланировать тест":
+                case "/schedule_test":
                     {
                         if (MyRepository.GetAuthor(update.Message.Chat.Id))
                         {
-                            //SheduleTest();
+                            //MyRepository.SheduleTest();
+                        }
+                        else
+                        {
+
                         }
                         break;
                     }
-                case "Добавить тест":
+                case "/add_test":
                     {
                         if (MyRepository.GetAuthor(update.Message.Chat.Id))
                         {
@@ -131,40 +129,34 @@ namespace Console_TelegramBot
                         }
                         break;
                     }
-                case "Посмотреть результаты":
+                case "/get_my_tests":
                     {
-                        return; //TODO
-                        var tmp = MyRepository.ImportResults(update.Message.Chat.Id);
-                        System.Text.StringBuilder sb = new();
-                        foreach (var item in tmp)
-                        {
-                            sb.Append(item.Value + '\n');
-                        }
-                        await botClient.SendTextMessageAsync(update.Message.Chat, $"Вот все ваши тесты:\n" + sb.ToString(), cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(update.Message.Chat, $"Вот все ваши тесты:\n{MyRepository.GetResults(update.Message.Chat.Id)}Для просмотра результатов по конкретному тесту, отправьте команду /get_results", cancellationToken: cancellationToken);
                         break;
                     }
                 default:
                     {
-                        if (update.Message.Text.Length == 32)
+                        if (command[0].Length == 32)
                         {
                             if (!testUsers.ContainsKey(update.Message.Chat.Id))
                             {
                                 testUsers.Add(update.Message.Chat.Id, new MyRepository());
                             }
-                            StartTest(botClient, testUsers[update.Message.Chat.Id], update.Message.Chat.Id, cancellationToken, update.Message.Text);
+                            StartTest(botClient, testUsers[update.Message.Chat.Id], update.Message.Chat.Id, cancellationToken, command[0]);
                         }
                         else
                         {
-                            await botClient.SendTextMessageAsync(update.Message.Chat, "Некорректная фраза. Выберите вариант, либо не нагружайте меня", cancellationToken: cancellationToken);
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "Неопознанная команда. Введитке команду, либо не нагружайте меня", cancellationToken: cancellationToken);
                         }
                         break;
                     }
             }
         }
 
-        private static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        private static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            Console.WriteLine(exception.Message);
+            Console.WriteLine(JsonConvert.SerializeObject(exception));
+            return Task.CompletedTask;
         }
 
         private static async void SaveFile(ITelegramBotClient botClient, string fileName, string fileId, long chatId)

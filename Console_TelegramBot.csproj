@@ -19,19 +19,4 @@
     <PackageReference Include="Telegram.Bot" Version="18.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Console_TelegramBot.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Console_TelegramBot.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Console_TelegramBot.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Console_TelegramBot.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
 </Project>

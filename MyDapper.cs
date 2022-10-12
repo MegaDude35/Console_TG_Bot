@@ -10,7 +10,7 @@ namespace Console_TelegramBot
     {
         private static class MyDapper
         {
-            static readonly SqlConnection conn = new(System.Configuration.ConfigurationManager.ConnectionStrings[0].ConnectionString);
+            static readonly SqlConnection conn = new(System.Configuration.ConfigurationManager.ConnectionStrings["ConnString"].ConnectionString);
             public static TestKeys GetTestKey(string key)
             {
                 conn.Open();
@@ -45,6 +45,7 @@ namespace Console_TelegramBot
                 conn.Close();
                 return result;
             }
+
             public static Users GetUser(long TG_ID)
             {
                 conn.Open();
@@ -69,7 +70,6 @@ namespace Console_TelegramBot
             }
             public static List<Questions> GetQuestions(int testID)
             {
-
                 conn.Open();
                 List<Questions> result = conn.Query<Questions>(@"
                 select *
@@ -81,27 +81,31 @@ namespace Console_TelegramBot
                 return result;
             }
 
-            public static Dictionary<int, string> GetCompletedTests(long TG_ID)
+            public static List<Tests> GetCompletedTests(long TG_ID)
             {
                 conn.Open();
-                Dictionary<int, string> result = new();
-                List<Tests> tests = conn.Query<Tests>(@"
+                List<Tests> result = conn.Query<Tests>(@"
                 select *
                 from Tests
                 join Test_Keys on Tests.ID = Test_Keys.Test_ID
                 join Answers on Answers.Test_Key_ID = Test_Keys.ID
-                join Users on Users.TG_ID = Answers.User_ID
-                where Users.TG_ID = @TG_ID
-                group by Answers.Test_Key_ID;",
+                where Answers.User_ID = @TG_ID;",
                 new { TG_ID }).ToList();
                 conn.Close();
-                foreach (Tests test in tests)
-                {
-                    result.Add(test.ID, test.Name);
-                }
                 return result;
             }
-
+            public static List<Questions> GetTestResult(long TG_ID, int Test_ID)
+            {
+                conn.Open();
+                List<Questions> result = conn.Query<Questions>(@"
+                select *
+                from Questions
+                join Answers on Answers.Question_ID = ID
+                where Answers.User_ID = @TG_ID and Questions.Test_ID = @Test_ID;",
+                new { TG_ID, Test_ID }).ToList();
+                conn.Close();
+                return result;
+            }
             public static int SaveTest(List<Questions> questions, string testName, short TimeToTake, long TG_ID)
             {
                 conn.Open();
