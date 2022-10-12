@@ -3,8 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace Console_TelegramBot
 {
-    class AikenParser { 
-    
+    internal class AikenParser
+    {
         public static List<Models.Questions> ParseQuestions(string filePath)
         {
             byte groupCount = 0;

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Polling;
-using Newtonsoft.Json;
 
 namespace Console_TelegramBot
 {
     class TelegramBotAPI
     {
-        private readonly static Dictionary<long, MyRepository> testUsers = new();
+        private static readonly Dictionary<long, MyRepository> testUsers = new();
+
         public TelegramBotAPI()
         {
             ITelegramBotClient bot = new TelegramBotClient(System.Configuration.ConfigurationManager.AppSettings["BotKey"]);
@@ -32,6 +32,7 @@ namespace Console_TelegramBot
                 new CancellationTokenSource().Token
             );
         }
+
         private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             if (update.Type == UpdateType.PollAnswer)
@@ -55,7 +56,6 @@ namespace Console_TelegramBot
                 {
                     await botClient.DeleteMessageAsync(update.Message.Chat.Id, update.Message.MessageId, cancellationToken);
                     await botClient.SendTextMessageAsync(update.Message.Chat, "У вас нет прав на загрузку файла.\nЕсли вы считаете что это неправильно, свяжитесь с администратором", cancellationToken: cancellationToken);
-
                 }
                 return;
             }
@@ -80,11 +80,21 @@ namespace Console_TelegramBot
                         }
                         await botClient.SendTextMessageAsync(
                         update.Message.Chat.Id,
-                        "Привет, что делаем?",
+                        "Приветствую. Введите команду чтобы начать работу.\nВведите /help для помощи по командам",
                         cancellationToken: cancellationToken
                         );
                         break;
                     }
+
+                case "/help":
+                    {
+                        await botClient.SendTextMessageAsync(
+                        update.Message.Chat.Id,
+                        "Приветствую. Введите команду чтобы начать работу.\nВведите /help для помощи по командам",
+                        cancellationToken: cancellationToken);
+                        break;
+                    }
+
                 case "/get_results":
                     {
                         if (command.Length == 2)
@@ -100,23 +110,27 @@ namespace Console_TelegramBot
                         }
                         break;
                     }
+
                 case "/start_test":
                     {
                         await botClient.SendTextMessageAsync(update.Message.Chat, "Отправьте мне ключ и я постараюсь найти ваш тест.", cancellationToken: cancellationToken);
                         break;
                     }
+
                 case "/schedule_test":
                     {
                         if (MyRepository.GetAuthor(update.Message.Chat.Id))
                         {
+                            //TODO
                             //MyRepository.SheduleTest();
                         }
                         else
                         {
-
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "У вас нет прав на планирование теста.", cancellationToken: cancellationToken);
                         }
                         break;
                     }
+
                 case "/add_test":
                     {
                         if (MyRepository.GetAuthor(update.Message.Chat.Id))
@@ -129,11 +143,13 @@ namespace Console_TelegramBot
                         }
                         break;
                     }
-                case "/get_my_tests":
+
+                case "/get_tests":
                     {
                         await botClient.SendTextMessageAsync(update.Message.Chat, $"Вот все ваши тесты:\n{MyRepository.GetResults(update.Message.Chat.Id)}Для просмотра результатов по конкретному тесту, отправьте команду /get_results", cancellationToken: cancellationToken);
                         break;
                     }
+
                 default:
                     {
                         if (command[0].Length == 32)
@@ -155,7 +171,7 @@ namespace Console_TelegramBot
 
         private static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(exception));
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(exception));
             return Task.CompletedTask;
         }
 
@@ -207,6 +223,7 @@ namespace Console_TelegramBot
                 await botClient.SendTextMessageAsync(chatId, "По данному ключу тест завершён.", cancellationToken: cancellationToken);
             }
         }
+
         /*    private static async void GetJson(Exception obj)
             {
                 string json;

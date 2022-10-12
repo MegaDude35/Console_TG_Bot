@@ -11,7 +11,7 @@ namespace Console_TelegramBot
         //TODO попробовать заменить словарь обычными запросами в бд используя ключ и возвращать массив
         private readonly Dictionary<int, string[]> _dic_Variants = new();
 
-        private readonly static Random _rand = new();
+        private static readonly Random _rand = new();
 
         public int Rand { get; private set; }
 
@@ -45,7 +45,7 @@ namespace Console_TelegramBot
         public void SetResponse(int IDResponse, long TG_ID, int variant)
         {
             MyDapper.SaveAnswer(TestKey, TG_ID, _dic_Variants[variant][++IDResponse]);
-            // удаляем вопрос из списка вопросов (чтобы больше не показывался)
+            // удаляем вопрос из списка вопросов чтобы больше не показывался
             _dic_Variants.Remove(variant);
         }
 
@@ -57,22 +57,27 @@ namespace Console_TelegramBot
             System.Text.StringBuilder sb = new();
             foreach (var item in tmp)
             {
-                sb.Append(item.ID + '\t');
-                sb.Append(item.Name + '\n');
+                sb.AppendLine("ID: " + item.ID);
+                sb.AppendLine("Имя: " + item.Name);
+                sb.AppendLine();
             }
             return sb.ToString();
         }
-        public static string GetTestResult(long TG_ID, int test_key)
+
+        public static string GetTestResult(long TG_ID, int Test_ID)
         {
-            var tmp = MyDapper.GetTestResult(TG_ID, test_key);
+            var tmp = MyDapper.GetTestResult(TG_ID, Test_ID);
             System.Text.StringBuilder sb = new();
             foreach (var item in tmp)
             {
-                sb.Append(item.Question_Text + '\t');
-                sb.Append(item.Question_Ball + '\n');
+                sb.Append(item.Question_Text);
+                sb.Append('\t');
+                sb.Append(item.Question_Ball);
+                sb.AppendLine();
             }
             return sb.ToString();
         }
+
         public static bool CheckAddUser(long TG_ID) => MyDapper.GetUser(TG_ID).TG_ID != 0;
 
         public static void AddUser(long TG_ID, string Firstname, string Lastname) => MyDapper.AddUser(TG_ID, Firstname, Lastname);
@@ -81,6 +86,7 @@ namespace Console_TelegramBot
             Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", length)
                       .Select(s => s[_rand.Next(s.Length)])
                       .ToArray());
+
         public static void SetAuthor(long TG_ID) => MyDapper.SetAuthor(TG_ID);
     }
 }

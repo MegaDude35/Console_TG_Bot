@@ -11,6 +11,7 @@ namespace Console_TelegramBot
         private static class MyDapper
         {
             static readonly SqlConnection conn = new(System.Configuration.ConfigurationManager.ConnectionStrings["ConnString"].ConnectionString);
+
             public static TestKeys GetTestKey(string key)
             {
                 conn.Open();
@@ -68,6 +69,7 @@ namespace Console_TelegramBot
                 conn.Close();
                 return result;
             }
+
             public static List<Questions> GetQuestions(int testID)
             {
                 conn.Open();
@@ -94,15 +96,16 @@ namespace Console_TelegramBot
                 conn.Close();
                 return result;
             }
+
             public static List<Questions> GetTestResult(long TG_ID, int Test_ID)
             {
                 conn.Open();
                 List<Questions> result = conn.Query<Questions>(@"
                 select *
                 from Questions
-                join Answers on Answers.Question_ID = ID
+                join Answers on Answers.Question_ID = Questions.ID
                 where Answers.User_ID = @TG_ID and Questions.Test_ID = @Test_ID;",
-                new { TG_ID, Test_ID }).ToList();
+                new { TG_ID,  Test_ID}).ToList();
                 conn.Close();
                 return result;
             }
