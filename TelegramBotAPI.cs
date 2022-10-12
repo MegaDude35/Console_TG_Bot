@@ -144,6 +144,19 @@ namespace Console_TelegramBot
                         break;
                     }
 
+                case "/remove_test": //TODO
+                    {
+                        if (MyRepository.GetAuthor(update.Message.Chat.Id))
+                        {
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "Отправьте мне файл в формате Aiken для загрузки вопросов", cancellationToken: cancellationToken);
+                        }
+                        else
+                        {
+                            await botClient.SendTextMessageAsync(update.Message.Chat, "Данный функционал недоступен.\nЕсли вы считаете что это неправильно, свяжитесь с администратором", cancellationToken: cancellationToken);
+                        }
+                        break;
+                    }
+
                 case "/get_tests":
                     {
                         await botClient.SendTextMessageAsync(update.Message.Chat, $"Вот все ваши тесты:\n{MyRepository.GetResults(update.Message.Chat.Id)}Для просмотра результатов по конкретному тесту, отправьте команду /get_results", cancellationToken: cancellationToken);
