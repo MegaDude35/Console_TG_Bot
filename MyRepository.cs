@@ -16,6 +16,11 @@ namespace Console_TelegramBot
 
         public int Rand { get; private set; }
 
+        /// <summary>
+        /// Запускает тест
+        /// </summary>
+        /// <param name="key">Ключ для тестирования</param>
+        /// <returns>Результат запуска (истина/ложь)</returns>
         public bool StartTest(string key)
         {
             TestKey = key;
@@ -39,23 +44,56 @@ namespace Console_TelegramBot
             return count > 0;
         }
 
+        /// <summary>
+        /// Возвращает заголовок вопроса
+        /// </summary>
+        /// <param name="i">Порядковый номер вопроса</param>
+        /// <returns>Заголовок вопроса</returns>
         public string GetQuestion(int i) => _dic_Variants[i][0];
 
+        /// <summary>
+        /// Возвращает варианты ответа
+        /// </summary>
+        /// <param name="i">Порядковый номер вопроса</param>
+        /// <returns>Варианты ответа</returns>
         public IEnumerable<string> GetVariant(int i) => _dic_Variants[i][1..];
 
+        /// <summary>
+        /// Возвращает случайный номер вопроса или -1 если вопросы закончились
+        /// </summary>
+        /// <returns>Случайный номер вопроса или -1 если вопросы закончились</returns>
         public int GetRandom() => Rand = _dic_Variants.Count == 0 ? -1 : _rand.Next(0, _dic_Variants.Count);
 
+        /// <summary>
+        /// Проверяет права автора
+        /// </summary>
+        /// <param name="TG_ID">ID пользователя</param>
+        /// <returns>Статус наличия прав автора</returns>
         public static bool GetAuthor(long TG_ID) => MyDapper.GetSingle<Users>(SQLQueries.GetSingleUser, TG_ID).Author;
 
-        public void SetResponse(int IDResponse, long TG_ID, int variant)
+        /// <summary>
+        /// Сохраняет ответ и удаляет вопрос из списка вопросов
+        /// </summary>
+        /// <param name="responseIndex"></param>
+        /// <param name="TG_ID">ID пользователя</param>
+        /// <param name="variant">Индекс варианта</param>
+        public void SetResponse(int responseIndex, long TG_ID, int variant)
         {
-            MyDapper.SaveAnswer(TestKey, TG_ID, _dic_Variants[variant][++IDResponse]);
+            MyDapper.SaveAnswer(TestKey, TG_ID, _dic_Variants[variant][++responseIndex]);
             // удаляем вопрос из списка вопросов чтобы больше не показывался
             _dic_Variants.Remove(variant);
         }
 
-        public static int SaveTest(List<Models.Questions> questions, string testName, short TimeToTake, long TG_ID) =>
-            MyDapper.SaveTest(questions, testName, TimeToTake, TG_ID);
+        /// <summary>
+        /// Сохраняет спарсенный тест в базу данных
+        /// </summary>
+        /// <param name="questions">Список вопросов (с заголовками)</param>
+        /// <param name="testName">Имя теста</param>
+        /// <param name="timeToTake">Время на прохождение</param>
+        /// <param name="TG_ID">ID пользователя (автора)</param>
+        /// <returns>Количество добавленных строк вопросов теста</returns>
+        public static int SaveTest(List<Models.Questions> questions, string testName, short timeToTake, long TG_ID) =>
+            MyDapper.SaveTest(questions, testName, timeToTake, TG_ID);
 
         public static string GetResults(long TG_ID, bool author = false)
         {
@@ -70,6 +108,12 @@ namespace Console_TelegramBot
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Просмотр результата тестирования
+        /// </summary>
+        /// <param name="TG_ID">ID пользователя</param>
+        /// <param name="Test_ID">ID теста</param>
+        /// <returns>Строку с текстом вопроса и ответом</returns>
         public static string GetTestResult(long TG_ID, string Test_ID)
         {
             if (!int.TryParse(Test_ID, out int testID))

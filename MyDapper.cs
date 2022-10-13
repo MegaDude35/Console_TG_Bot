@@ -108,7 +108,6 @@ namespace Console_TelegramBot
                 conn.Close();
                 return result;
             }
-
         }
     }
 }
