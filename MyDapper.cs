@@ -12,103 +12,24 @@ namespace Console_TelegramBot
         {
             static readonly SqlConnection conn = new(System.Configuration.ConfigurationManager.ConnectionStrings["ConnString"].ConnectionString);
 
-            public static TestKeys GetTestKey(string key)
+            public static T GetSingle<T>(string query, dynamic param1 = null, dynamic param2 = null)
             {
                 conn.Open();
-                TestKeys result = conn.Query<TestKeys>(@"
-                select top 1 *
-                from Test_Keys
-                where Test_Key like @key;",
-                new { key }).FirstOrDefault();
+                T result = conn.Query<T>(query,
+                new { param1, param2 }).FirstOrDefault();
                 conn.Close();
                 return result;
             }
 
-            public static Tests GetTest(int testID)
+            public static List<T> GetList<T>(string query, dynamic param1 = null, dynamic param2 = null)
             {
-
                 conn.Open();
-                Tests result = conn.Query<Tests>(@"
-                select top 1 *
-                from Tests
-                where ID = @testID;",
-                new { testID }).FirstOrDefault();
+                List<T> result = conn.Query<T>(query,
+                new {param1, param2}).ToList();
                 conn.Close();
                 return result;
             }
 
-            public static List<Tests> GetTests()
-            {
-                conn.Open();
-                List<Tests> result = conn.Query<Tests>(@"
-                select *
-                from Tests;").ToList();
-                conn.Close();
-                return result;
-            }
-
-            public static Users GetUser(long TG_ID)
-            {
-                conn.Open();
-                Users result = conn.Query<Users>(@"
-                select top 1 *
-                from Users
-                where TG_ID = @TG_ID;",
-                new { TG_ID }).FirstOrDefault();
-                conn.Close();
-                return result;
-            }
-
-            public static Questions GetQuestion(string Question_Text)
-            {
-                conn.Open();
-                Questions result = conn.Query<Questions>(@"
-                select top 1 *
-                from Questions
-                where Question_Text like @Question_Text;", new { Question_Text }).FirstOrDefault();
-                conn.Close();
-                return result;
-            }
-
-            public static List<Questions> GetQuestions(int testID)
-            {
-                conn.Open();
-                List<Questions> result = conn.Query<Questions>(@"
-                select *
-                from Questions
-                where Test_Id = @testID
-                order by Question_Group asc;",
-                new { testID }).ToList();
-                conn.Close();
-                return result;
-            }
-
-            public static List<Tests> GetCompletedTests(long TG_ID)
-            {
-                conn.Open();
-                List<Tests> result = conn.Query<Tests>(@"
-                select *
-                from Tests
-                join Test_Keys on Tests.ID = Test_Keys.Test_ID
-                join Answers on Answers.Test_Key_ID = Test_Keys.ID
-                where Answers.User_ID = @TG_ID;",
-                new { TG_ID }).ToList();
-                conn.Close();
-                return result;
-            }
-
-            public static List<Questions> GetTestResult(long TG_ID, int Test_ID)
-            {
-                conn.Open();
-                List<Questions> result = conn.Query<Questions>(@"
-                select *
-                from Questions
-                join Answers on Answers.Question_ID = Questions.ID
-                where Answers.User_ID = @TG_ID and Questions.Test_ID = @Test_ID;",
-                new { TG_ID,  Test_ID}).ToList();
-                conn.Close();
-                return result;
-            }
             public static int SaveTest(List<Questions> questions, string testName, short TimeToTake, long TG_ID)
             {
                 conn.Open();
@@ -139,8 +60,8 @@ namespace Console_TelegramBot
 
             public static int SaveAnswer(string TestKey, long TG_ID, string Question_Text, int Try = 1)
             {
-                var Test_Key_ID = GetTestKey(TestKey).ID;
-                var Question_ID = GetQuestion(Question_Text).ID;
+                var Test_Key_ID = GetSingle<TestKeys>(SQLQueries.GetSingleTestKey, TestKey).ID;
+                var Question_ID = GetSingle<Questions>(SQLQueries.GetSingleQuestion, Question_Text).ID;
                 conn.Open();
                 int result = conn.Execute(@"
                     insert into Answers(Test_Key_ID, User_ID, Question_ID, Try)
@@ -176,6 +97,18 @@ namespace Console_TelegramBot
                 new { flag, TG_ID });
                 conn.Close();
             }
+
+            public static int DeleteTest(int testID)
+            {
+                conn.Open();
+                int result = conn.Execute(@"
+                delete from tests
+                where id = @testID",
+                new { testID });
+                conn.Close();
+                return result;
+            }
+
         }
     }
 }

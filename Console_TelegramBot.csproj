@@ -13,10 +13,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="TG_Test_Bot.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TG_Test_Bot.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TG_Test_Bot.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     <PackageReference Include="Telegram.Bot" Version="18.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TG_Test_Bot.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TG_Test_Bot.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

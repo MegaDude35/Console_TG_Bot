@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Console_TelegramBot.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +19,11 @@ namespace Console_TelegramBot
         public bool StartTest(string key)
         {
             TestKey = key;
-            var _variants = MyDapper.GetQuestions(MyDapper.GetTestKey(key).Test_ID);
+            List<Questions> _variants = MyDapper.GetList<Questions>(
+                SQLQueries.GetSingleQuestion,
+                MyDapper.GetSingle<TestKeys>(
+                    SQLQueries.GetSingleTestKey, key).Test_ID);
+
             List<string> strings = new(_variants.Count);
             int count = 0;
             for (int i = 0; i < _variants.Count; i++)
@@ -40,7 +45,7 @@ namespace Console_TelegramBot
 
         public int GetRandom() => Rand = _dic_Variants.Count == 0 ? -1 : _rand.Next(0, _dic_Variants.Count);
 
-        public static bool GetAuthor(long TG_ID) => MyDapper.GetUser(TG_ID).Author;
+        public static bool GetAuthor(long TG_ID) => MyDapper.GetSingle<Users>(SQLQueries.GetSingleUser, TG_ID).Author;
 
         public void SetResponse(int IDResponse, long TG_ID, int variant)
         {
@@ -49,11 +54,12 @@ namespace Console_TelegramBot
             _dic_Variants.Remove(variant);
         }
 
-        public static int SaveTest(List<Models.Questions> questions, string testName, short TimeToTake, long TG_ID) => MyDapper.SaveTest(questions, testName, TimeToTake, TG_ID);
+        public static int SaveTest(List<Models.Questions> questions, string testName, short TimeToTake, long TG_ID) =>
+            MyDapper.SaveTest(questions, testName, TimeToTake, TG_ID);
 
-        public static string GetResults(long TG_ID)
+        public static string GetResults(long TG_ID, bool author = false)
         {
-            var tmp = MyDapper.GetCompletedTests(TG_ID);
+            var tmp = MyDapper.GetList<Tests>(author ? SQLQueries.GetListMyCreatedTests : SQLQueries.GetListCompletedTests, TG_ID);
             System.Text.StringBuilder sb = new();
             foreach (var item in tmp)
             {
@@ -64,21 +70,40 @@ namespace Console_TelegramBot
             return sb.ToString();
         }
 
-        public static string GetTestResult(long TG_ID, int Test_ID)
+        public static string GetTestResult(long TG_ID, string Test_ID)
         {
-            var tmp = MyDapper.GetTestResult(TG_ID, Test_ID);
+            if (!int.TryParse(Test_ID, out int testID))
+            {
+                return string.Empty;
+            }
+            var tmp = MyDapper.GetList<Questions>(SQLQueries.GetTestQuestionsResult, TG_ID, testID);
             System.Text.StringBuilder sb = new();
             foreach (var item in tmp)
             {
-                sb.Append(item.Question_Text);
+                sb.Append("Вопрос " + item.Question_Text);
                 sb.Append('\t');
-                sb.Append(item.Question_Ball);
+                sb.Append("Балл" + item.Question_Ball);
                 sb.AppendLine();
             }
             return sb.ToString();
         }
 
-        public static bool CheckAddUser(long TG_ID) => MyDapper.GetUser(TG_ID).TG_ID != 0;
+        public static bool DeleteTest(long TG_ID, string Test_ID)
+        {
+            if (!int.TryParse(Test_ID, out int testID))
+            {
+                return false;
+            }
+
+            if (MyDapper.GetSingle<Users>(SQLQueries.GetSingleUser, MyDapper.GetSingle<Tests>(SQLQueries.GetSingleTest, testID).Author_ID).TG_ID == TG_ID)
+            {
+                return MyDapper.DeleteTest(testID) > 0;
+            }
+
+            return false;
+        }
+
+        public static bool CheckAddUser(long TG_ID) => MyDapper.GetSingle<Users>(SQLQueries.GetSingleUser, TG_ID).TG_ID != 0;
 
         public static void AddUser(long TG_ID, string Firstname, string Lastname) => MyDapper.AddUser(TG_ID, Firstname, Lastname);
 
