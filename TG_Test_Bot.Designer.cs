@@ -34,6 +34,8 @@ namespace Console_TelegramBot {
         
         private UsersDataTable tableUsers;
         
+        private global::System.Data.DataRelation relationFK_Test_Keys_Tests;
+        
         private global::System.Data.DataRelation relationFK_Answers_Questions;
         
         private global::System.Data.DataRelation relationFK_Answers_Test_Keys;
@@ -41,8 +43,6 @@ namespace Console_TelegramBot {
         private global::System.Data.DataRelation relationFK_Answers_Users;
         
         private global::System.Data.DataRelation relationFK_Questions_Tests;
-        
-        private global::System.Data.DataRelation relationFK_Test_Keys_Tests;
         
         private global::System.Data.DataRelation relationFK_Test_Keys_Users;
         
@@ -304,11 +304,11 @@ namespace Console_TelegramBot {
                     this.tableUsers.InitVars();
                 }
             }
+            this.relationFK_Test_Keys_Tests = this.Relations["FK_Test_Keys_Tests"];
             this.relationFK_Answers_Questions = this.Relations["FK_Answers_Questions"];
             this.relationFK_Answers_Test_Keys = this.Relations["FK_Answers_Test_Keys"];
             this.relationFK_Answers_Users = this.Relations["FK_Answers_Users"];
             this.relationFK_Questions_Tests = this.Relations["FK_Questions_Tests"];
-            this.relationFK_Test_Keys_Tests = this.Relations["FK_Test_Keys_Tests"];
             this.relationFK_Test_Keys_Users = this.Relations["FK_Test_Keys_Users"];
             this.relationFK_Tests_Users = this.Relations["FK_Tests_Users"];
         }
@@ -331,6 +331,18 @@ namespace Console_TelegramBot {
             base.Tables.Add(this.tableTests);
             this.tableUsers = new UsersDataTable();
             base.Tables.Add(this.tableUsers);
+            global::System.Data.ForeignKeyConstraint fkc;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Test_Keys_Tests", new global::System.Data.DataColumn[] {
+                        this.tableTests.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tableTest_Keys.Test_IDColumn});
+            this.tableTest_Keys.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            this.relationFK_Test_Keys_Tests = new global::System.Data.DataRelation("FK_Test_Keys_Tests", new global::System.Data.DataColumn[] {
+                        this.tableTests.IDColumn}, new global::System.Data.DataColumn[] {
+                        this.tableTest_Keys.Test_IDColumn}, false);
+            this.Relations.Add(this.relationFK_Test_Keys_Tests);
             this.relationFK_Answers_Questions = new global::System.Data.DataRelation("FK_Answers_Questions", new global::System.Data.DataColumn[] {
                         this.tableQuestions.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tableAnswers.Question_IDColumn}, false);
@@ -347,10 +359,6 @@ namespace Console_TelegramBot {
                         this.tableTests.IDColumn}, new global::System.Data.DataColumn[] {
                         this.tableQuestions.Test_IDColumn}, false);
             this.Relations.Add(this.relationFK_Questions_Tests);
-            this.relationFK_Test_Keys_Tests = new global::System.Data.DataRelation("FK_Test_Keys_Tests", new global::System.Data.DataColumn[] {
-                        this.tableTests.IDColumn}, new global::System.Data.DataColumn[] {
-                        this.tableTest_Keys.Test_IDColumn}, false);
-            this.Relations.Add(this.relationFK_Test_Keys_Tests);
             this.relationFK_Test_Keys_Users = new global::System.Data.DataRelation("FK_Test_Keys_Users", new global::System.Data.DataColumn[] {
                         this.tableUsers.TG_IDColumn}, new global::System.Data.DataColumn[] {
                         this.tableTest_Keys.User_IDColumn}, false);
@@ -2589,23 +2597,23 @@ namespace Console_TelegramBot {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public QuestionsRow[] GetQuestionsRows() {
-                if ((this.Table.ChildRelations["FK_Questions_Tests"] == null)) {
-                    return new QuestionsRow[0];
-                }
-                else {
-                    return ((QuestionsRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Questions_Tests"])));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public Test_KeysRow[] GetTest_KeysRows() {
                 if ((this.Table.ChildRelations["FK_Test_Keys_Tests"] == null)) {
                     return new Test_KeysRow[0];
                 }
                 else {
                     return ((Test_KeysRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Test_Keys_Tests"])));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public QuestionsRow[] GetQuestionsRows() {
+                if ((this.Table.ChildRelations["FK_Questions_Tests"] == null)) {
+                    return new QuestionsRow[0];
+                }
+                else {
+                    return ((QuestionsRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Questions_Tests"])));
                 }
             }
         }

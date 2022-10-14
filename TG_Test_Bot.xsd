@@ -343,94 +343,94 @@ SELECT TG_ID, Firstname, Lastname, Author FROM Users WHERE (TG_ID = @TG_ID)</Com
       </DataSource>
     </xs:appinfo>
   </xs:annotation>
-  <xs:element name="TG_Test_Bot" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_UserDSName="TG_Test_Bot" msprop:Generator_DataSetName="TG_Test_Bot">
+  <xs:element name="TG_Test_Bot" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="TG_Test_Bot" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="TG_Test_Bot">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Answers" msprop:Generator_RowEvHandlerName="AnswersRowChangeEventHandler" msprop:Generator_RowDeletedName="AnswersRowDeleted" msprop:Generator_RowDeletingName="AnswersRowDeleting" msprop:Generator_RowEvArgName="AnswersRowChangeEvent" msprop:Generator_TablePropName="Answers" msprop:Generator_RowChangedName="AnswersRowChanged" msprop:Generator_RowChangingName="AnswersRowChanging" msprop:Generator_TableClassName="AnswersDataTable" msprop:Generator_RowClassName="AnswersRow" msprop:Generator_TableVarName="tableAnswers" msprop:Generator_UserTableName="Answers">
+        <xs:element name="Answers" msprop:Generator_RowClassName="AnswersRow" msprop:Generator_RowEvHandlerName="AnswersRowChangeEventHandler" msprop:Generator_RowDeletedName="AnswersRowDeleted" msprop:Generator_RowDeletingName="AnswersRowDeleting" msprop:Generator_RowEvArgName="AnswersRowChangeEvent" msprop:Generator_TablePropName="Answers" msprop:Generator_RowChangedName="AnswersRowChanged" msprop:Generator_UserTableName="Answers" msprop:Generator_RowChangingName="AnswersRowChanging" msprop:Generator_TableClassName="AnswersDataTable" msprop:Generator_TableVarName="tableAnswers">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_UserColumnName="ID" type="xs:int" />
-              <xs:element name="Test_Key_ID" msprop:Generator_ColumnPropNameInRow="Test_Key_ID" msprop:Generator_ColumnPropNameInTable="Test_Key_IDColumn" msprop:Generator_ColumnVarNameInTable="columnTest_Key_ID" msprop:Generator_UserColumnName="Test_Key_ID" type="xs:int" />
-              <xs:element name="User_ID" msprop:Generator_ColumnPropNameInRow="User_ID" msprop:Generator_ColumnPropNameInTable="User_IDColumn" msprop:Generator_ColumnVarNameInTable="columnUser_ID" msprop:Generator_UserColumnName="User_ID" type="xs:long" />
-              <xs:element name="Question_ID" msprop:Generator_ColumnPropNameInRow="Question_ID" msprop:Generator_ColumnPropNameInTable="Question_IDColumn" msprop:Generator_ColumnVarNameInTable="columnQuestion_ID" msprop:Generator_UserColumnName="Question_ID" type="xs:int" />
-              <xs:element name="Try" msprop:Generator_ColumnPropNameInRow="Try" msprop:Generator_ColumnPropNameInTable="TryColumn" msprop:Generator_ColumnVarNameInTable="columnTry" msprop:Generator_UserColumnName="Try" type="xs:unsignedByte" />
+              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnVarNameInTable="columnID" type="xs:int" />
+              <xs:element name="Test_Key_ID" msprop:Generator_UserColumnName="Test_Key_ID" msprop:Generator_ColumnPropNameInTable="Test_Key_IDColumn" msprop:Generator_ColumnPropNameInRow="Test_Key_ID" msprop:Generator_ColumnVarNameInTable="columnTest_Key_ID" type="xs:int" />
+              <xs:element name="User_ID" msprop:Generator_UserColumnName="User_ID" msprop:Generator_ColumnPropNameInTable="User_IDColumn" msprop:Generator_ColumnPropNameInRow="User_ID" msprop:Generator_ColumnVarNameInTable="columnUser_ID" type="xs:long" />
+              <xs:element name="Question_ID" msprop:Generator_UserColumnName="Question_ID" msprop:Generator_ColumnPropNameInTable="Question_IDColumn" msprop:Generator_ColumnPropNameInRow="Question_ID" msprop:Generator_ColumnVarNameInTable="columnQuestion_ID" type="xs:int" />
+              <xs:element name="Try" msprop:Generator_UserColumnName="Try" msprop:Generator_ColumnPropNameInTable="TryColumn" msprop:Generator_ColumnPropNameInRow="Try" msprop:Generator_ColumnVarNameInTable="columnTry" type="xs:unsignedByte" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Questions" msprop:Generator_RowEvHandlerName="QuestionsRowChangeEventHandler" msprop:Generator_RowDeletedName="QuestionsRowDeleted" msprop:Generator_RowDeletingName="QuestionsRowDeleting" msprop:Generator_RowEvArgName="QuestionsRowChangeEvent" msprop:Generator_TablePropName="Questions" msprop:Generator_RowChangedName="QuestionsRowChanged" msprop:Generator_RowChangingName="QuestionsRowChanging" msprop:Generator_TableClassName="QuestionsDataTable" msprop:Generator_RowClassName="QuestionsRow" msprop:Generator_TableVarName="tableQuestions" msprop:Generator_UserTableName="Questions">
+        <xs:element name="Questions" msprop:Generator_RowClassName="QuestionsRow" msprop:Generator_RowEvHandlerName="QuestionsRowChangeEventHandler" msprop:Generator_RowDeletedName="QuestionsRowDeleted" msprop:Generator_RowDeletingName="QuestionsRowDeleting" msprop:Generator_RowEvArgName="QuestionsRowChangeEvent" msprop:Generator_TablePropName="Questions" msprop:Generator_RowChangedName="QuestionsRowChanged" msprop:Generator_UserTableName="Questions" msprop:Generator_RowChangingName="QuestionsRowChanging" msprop:Generator_TableClassName="QuestionsDataTable" msprop:Generator_TableVarName="tableQuestions">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_UserColumnName="ID" type="xs:int" />
-              <xs:element name="Test_ID" msprop:Generator_ColumnPropNameInRow="Test_ID" msprop:Generator_ColumnPropNameInTable="Test_IDColumn" msprop:Generator_ColumnVarNameInTable="columnTest_ID" msprop:Generator_UserColumnName="Test_ID" type="xs:int" />
-              <xs:element name="Question_Group" msprop:Generator_ColumnPropNameInRow="Question_Group" msprop:Generator_ColumnPropNameInTable="Question_GroupColumn" msprop:Generator_ColumnVarNameInTable="columnQuestion_Group" msprop:Generator_UserColumnName="Question_Group" type="xs:int" />
-              <xs:element name="Question_Type" msprop:Generator_ColumnPropNameInRow="Question_Type" msprop:Generator_ColumnPropNameInTable="Question_TypeColumn" msprop:Generator_ColumnVarNameInTable="columnQuestion_Type" msprop:Generator_UserColumnName="Question_Type" type="xs:unsignedByte" />
-              <xs:element name="Question_Text" msprop:Generator_ColumnPropNameInRow="Question_Text" msprop:Generator_ColumnPropNameInTable="Question_TextColumn" msprop:Generator_ColumnVarNameInTable="columnQuestion_Text" msprop:Generator_UserColumnName="Question_Text">
+              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnVarNameInTable="columnID" type="xs:int" />
+              <xs:element name="Test_ID" msprop:Generator_UserColumnName="Test_ID" msprop:Generator_ColumnPropNameInTable="Test_IDColumn" msprop:Generator_ColumnPropNameInRow="Test_ID" msprop:Generator_ColumnVarNameInTable="columnTest_ID" type="xs:int" />
+              <xs:element name="Question_Group" msprop:Generator_UserColumnName="Question_Group" msprop:Generator_ColumnPropNameInTable="Question_GroupColumn" msprop:Generator_ColumnPropNameInRow="Question_Group" msprop:Generator_ColumnVarNameInTable="columnQuestion_Group" type="xs:int" />
+              <xs:element name="Question_Type" msprop:Generator_UserColumnName="Question_Type" msprop:Generator_ColumnPropNameInTable="Question_TypeColumn" msprop:Generator_ColumnPropNameInRow="Question_Type" msprop:Generator_ColumnVarNameInTable="columnQuestion_Type" type="xs:unsignedByte" />
+              <xs:element name="Question_Text" msprop:Generator_UserColumnName="Question_Text" msprop:Generator_ColumnPropNameInTable="Question_TextColumn" msprop:Generator_ColumnPropNameInRow="Question_Text" msprop:Generator_ColumnVarNameInTable="columnQuestion_Text">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="2147483647" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Question_Ball" msprop:Generator_ColumnPropNameInRow="Question_Ball" msprop:Generator_ColumnPropNameInTable="Question_BallColumn" msprop:Generator_ColumnVarNameInTable="columnQuestion_Ball" msprop:Generator_UserColumnName="Question_Ball" type="xs:float" />
+              <xs:element name="Question_Ball" msprop:Generator_UserColumnName="Question_Ball" msprop:Generator_ColumnPropNameInTable="Question_BallColumn" msprop:Generator_ColumnPropNameInRow="Question_Ball" msprop:Generator_ColumnVarNameInTable="columnQuestion_Ball" type="xs:float" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Test_Keys" msprop:Generator_RowEvHandlerName="Test_KeysRowChangeEventHandler" msprop:Generator_RowDeletedName="Test_KeysRowDeleted" msprop:Generator_RowDeletingName="Test_KeysRowDeleting" msprop:Generator_RowEvArgName="Test_KeysRowChangeEvent" msprop:Generator_TablePropName="Test_Keys" msprop:Generator_RowChangedName="Test_KeysRowChanged" msprop:Generator_RowChangingName="Test_KeysRowChanging" msprop:Generator_TableClassName="Test_KeysDataTable" msprop:Generator_RowClassName="Test_KeysRow" msprop:Generator_TableVarName="tableTest_Keys" msprop:Generator_UserTableName="Test_Keys">
+        <xs:element name="Test_Keys" msprop:Generator_RowClassName="Test_KeysRow" msprop:Generator_RowEvHandlerName="Test_KeysRowChangeEventHandler" msprop:Generator_RowDeletedName="Test_KeysRowDeleted" msprop:Generator_RowDeletingName="Test_KeysRowDeleting" msprop:Generator_RowEvArgName="Test_KeysRowChangeEvent" msprop:Generator_TablePropName="Test_Keys" msprop:Generator_RowChangedName="Test_KeysRowChanged" msprop:Generator_UserTableName="Test_Keys" msprop:Generator_RowChangingName="Test_KeysRowChanging" msprop:Generator_TableClassName="Test_KeysDataTable" msprop:Generator_TableVarName="tableTest_Keys">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="ID" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_UserColumnName="ID" type="xs:int" />
-              <xs:element name="Test_Key" msprop:Generator_ColumnPropNameInRow="Test_Key" msprop:Generator_ColumnPropNameInTable="Test_KeyColumn" msprop:Generator_ColumnVarNameInTable="columnTest_Key" msprop:Generator_UserColumnName="Test_Key" minOccurs="0">
+              <xs:element name="ID" msprop:Generator_UserColumnName="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnVarNameInTable="columnID" type="xs:int" />
+              <xs:element name="Test_Key" msprop:Generator_UserColumnName="Test_Key" msprop:Generator_ColumnPropNameInTable="Test_KeyColumn" msprop:Generator_ColumnPropNameInRow="Test_Key" msprop:Generator_ColumnVarNameInTable="columnTest_Key" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="32" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Test_ID" msprop:Generator_ColumnPropNameInRow="Test_ID" msprop:Generator_ColumnPropNameInTable="Test_IDColumn" msprop:Generator_ColumnVarNameInTable="columnTest_ID" msprop:Generator_UserColumnName="Test_ID" type="xs:int" />
-              <xs:element name="User_ID" msprop:Generator_ColumnPropNameInRow="User_ID" msprop:Generator_ColumnPropNameInTable="User_IDColumn" msprop:Generator_ColumnVarNameInTable="columnUser_ID" msprop:Generator_UserColumnName="User_ID" type="xs:long" minOccurs="0" />
-              <xs:element name="Date_Enable_Key" msprop:Generator_ColumnPropNameInRow="Date_Enable_Key" msprop:Generator_ColumnPropNameInTable="Date_Enable_KeyColumn" msprop:Generator_ColumnVarNameInTable="columnDate_Enable_Key" msprop:Generator_UserColumnName="Date_Enable_Key" type="xs:dateTime" />
-              <xs:element name="Date_Disable_Key" msprop:Generator_ColumnPropNameInRow="Date_Disable_Key" msprop:Generator_ColumnPropNameInTable="Date_Disable_KeyColumn" msprop:Generator_ColumnVarNameInTable="columnDate_Disable_Key" msprop:Generator_UserColumnName="Date_Disable_Key" type="xs:dateTime" />
-              <xs:element name="Tryes" msprop:Generator_ColumnPropNameInRow="Tryes" msprop:Generator_ColumnPropNameInTable="TryesColumn" msprop:Generator_ColumnVarNameInTable="columnTryes" msprop:Generator_UserColumnName="Tryes" type="xs:unsignedByte" />
-              <xs:element name="Enabled" msprop:Generator_ColumnPropNameInRow="Enabled" msprop:Generator_ColumnPropNameInTable="EnabledColumn" msprop:Generator_ColumnVarNameInTable="columnEnabled" msprop:Generator_UserColumnName="Enabled" type="xs:boolean" />
+              <xs:element name="Test_ID" msprop:Generator_UserColumnName="Test_ID" msprop:Generator_ColumnPropNameInTable="Test_IDColumn" msprop:Generator_ColumnPropNameInRow="Test_ID" msprop:Generator_ColumnVarNameInTable="columnTest_ID" type="xs:int" />
+              <xs:element name="User_ID" msprop:Generator_UserColumnName="User_ID" msprop:Generator_ColumnPropNameInTable="User_IDColumn" msprop:Generator_ColumnPropNameInRow="User_ID" msprop:Generator_ColumnVarNameInTable="columnUser_ID" type="xs:long" minOccurs="0" />
+              <xs:element name="Date_Enable_Key" msprop:Generator_UserColumnName="Date_Enable_Key" msprop:Generator_ColumnPropNameInTable="Date_Enable_KeyColumn" msprop:Generator_ColumnPropNameInRow="Date_Enable_Key" msprop:Generator_ColumnVarNameInTable="columnDate_Enable_Key" type="xs:dateTime" />
+              <xs:element name="Date_Disable_Key" msprop:Generator_UserColumnName="Date_Disable_Key" msprop:Generator_ColumnPropNameInTable="Date_Disable_KeyColumn" msprop:Generator_ColumnPropNameInRow="Date_Disable_Key" msprop:Generator_ColumnVarNameInTable="columnDate_Disable_Key" type="xs:dateTime" />
+              <xs:element name="Tryes" msprop:Generator_UserColumnName="Tryes" msprop:Generator_ColumnPropNameInTable="TryesColumn" msprop:Generator_ColumnPropNameInRow="Tryes" msprop:Generator_ColumnVarNameInTable="columnTryes" type="xs:unsignedByte" />
+              <xs:element name="Enabled" msprop:Generator_UserColumnName="Enabled" msprop:Generator_ColumnPropNameInTable="EnabledColumn" msprop:Generator_ColumnPropNameInRow="Enabled" msprop:Generator_ColumnVarNameInTable="columnEnabled" type="xs:boolean" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Tests" msprop:Generator_RowEvHandlerName="TestsRowChangeEventHandler" msprop:Generator_RowDeletedName="TestsRowDeleted" msprop:Generator_RowDeletingName="TestsRowDeleting" msprop:Generator_RowEvArgName="TestsRowChangeEvent" msprop:Generator_TablePropName="Tests" msprop:Generator_RowChangedName="TestsRowChanged" msprop:Generator_RowChangingName="TestsRowChanging" msprop:Generator_TableClassName="TestsDataTable" msprop:Generator_RowClassName="TestsRow" msprop:Generator_TableVarName="tableTests" msprop:Generator_UserTableName="Tests">
+        <xs:element name="Tests" msprop:Generator_RowClassName="TestsRow" msprop:Generator_RowEvHandlerName="TestsRowChangeEventHandler" msprop:Generator_RowDeletedName="TestsRowDeleted" msprop:Generator_RowDeletingName="TestsRowDeleting" msprop:Generator_RowEvArgName="TestsRowChangeEvent" msprop:Generator_TablePropName="Tests" msprop:Generator_RowChangedName="TestsRowChanged" msprop:Generator_UserTableName="Tests" msprop:Generator_RowChangingName="TestsRowChanging" msprop:Generator_TableClassName="TestsDataTable" msprop:Generator_TableVarName="tableTests">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnVarNameInTable="columnID" msprop:Generator_UserColumnName="ID" type="xs:int" />
-              <xs:element name="Name" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_UserColumnName="Name">
+              <xs:element name="ID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="ID" msprop:Generator_ColumnPropNameInTable="IDColumn" msprop:Generator_ColumnPropNameInRow="ID" msprop:Generator_ColumnVarNameInTable="columnID" type="xs:int" />
+              <xs:element name="Name" msprop:Generator_UserColumnName="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnVarNameInTable="columnName">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="255" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Time_to_Take" msprop:Generator_ColumnPropNameInRow="Time_to_Take" msprop:Generator_ColumnPropNameInTable="Time_to_TakeColumn" msprop:Generator_ColumnVarNameInTable="columnTime_to_Take" msprop:Generator_UserColumnName="Time_to_Take" type="xs:unsignedByte" />
-              <xs:element name="Author_ID" msprop:Generator_ColumnPropNameInRow="Author_ID" msprop:Generator_ColumnPropNameInTable="Author_IDColumn" msprop:Generator_ColumnVarNameInTable="columnAuthor_ID" msprop:Generator_UserColumnName="Author_ID" type="xs:long" />
-              <xs:element name="Creation_Date" msprop:Generator_ColumnPropNameInRow="Creation_Date" msprop:Generator_ColumnPropNameInTable="Creation_DateColumn" msprop:Generator_ColumnVarNameInTable="columnCreation_Date" msprop:Generator_UserColumnName="Creation_Date" type="xs:dateTime" />
+              <xs:element name="Time_to_Take" msprop:Generator_UserColumnName="Time_to_Take" msprop:Generator_ColumnPropNameInTable="Time_to_TakeColumn" msprop:Generator_ColumnPropNameInRow="Time_to_Take" msprop:Generator_ColumnVarNameInTable="columnTime_to_Take" type="xs:unsignedByte" />
+              <xs:element name="Author_ID" msprop:Generator_UserColumnName="Author_ID" msprop:Generator_ColumnPropNameInTable="Author_IDColumn" msprop:Generator_ColumnPropNameInRow="Author_ID" msprop:Generator_ColumnVarNameInTable="columnAuthor_ID" type="xs:long" />
+              <xs:element name="Creation_Date" msprop:Generator_UserColumnName="Creation_Date" msprop:Generator_ColumnPropNameInTable="Creation_DateColumn" msprop:Generator_ColumnPropNameInRow="Creation_Date" msprop:Generator_ColumnVarNameInTable="columnCreation_Date" type="xs:dateTime" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Users" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowEvArgName="UsersRowChangeEvent" msprop:Generator_TablePropName="Users" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_RowClassName="UsersRow" msprop:Generator_TableVarName="tableUsers" msprop:Generator_UserTableName="Users">
+        <xs:element name="Users" msprop:Generator_RowClassName="UsersRow" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowEvArgName="UsersRowChangeEvent" msprop:Generator_TablePropName="Users" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_UserTableName="Users" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="TG_ID" msprop:Generator_ColumnPropNameInRow="TG_ID" msprop:Generator_ColumnPropNameInTable="TG_IDColumn" msprop:Generator_ColumnVarNameInTable="columnTG_ID" msprop:Generator_UserColumnName="TG_ID" type="xs:long" />
-              <xs:element name="Firstname" msprop:Generator_ColumnPropNameInRow="Firstname" msprop:Generator_ColumnPropNameInTable="FirstnameColumn" msprop:Generator_ColumnVarNameInTable="columnFirstname" msprop:Generator_UserColumnName="Firstname">
+              <xs:element name="TG_ID" msprop:Generator_UserColumnName="TG_ID" msprop:Generator_ColumnPropNameInTable="TG_IDColumn" msprop:Generator_ColumnPropNameInRow="TG_ID" msprop:Generator_ColumnVarNameInTable="columnTG_ID" type="xs:long" />
+              <xs:element name="Firstname" msprop:Generator_UserColumnName="Firstname" msprop:Generator_ColumnPropNameInTable="FirstnameColumn" msprop:Generator_ColumnPropNameInRow="Firstname" msprop:Generator_ColumnVarNameInTable="columnFirstname">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="32" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Lastname" msprop:Generator_ColumnPropNameInRow="Lastname" msprop:Generator_ColumnPropNameInTable="LastnameColumn" msprop:Generator_ColumnVarNameInTable="columnLastname" msprop:Generator_UserColumnName="Lastname" minOccurs="0">
+              <xs:element name="Lastname" msprop:Generator_UserColumnName="Lastname" msprop:Generator_ColumnPropNameInTable="LastnameColumn" msprop:Generator_ColumnPropNameInRow="Lastname" msprop:Generator_ColumnVarNameInTable="columnLastname" minOccurs="0">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:maxLength value="32" />
                   </xs:restriction>
                 </xs:simpleType>
               </xs:element>
-              <xs:element name="Author" msprop:Generator_ColumnPropNameInRow="Author" msprop:Generator_ColumnPropNameInTable="AuthorColumn" msprop:Generator_ColumnVarNameInTable="columnAuthor" msprop:Generator_UserColumnName="Author" type="xs:boolean" />
+              <xs:element name="Author" msprop:Generator_UserColumnName="Author" msprop:Generator_ColumnPropNameInTable="AuthorColumn" msprop:Generator_ColumnPropNameInRow="Author" msprop:Generator_ColumnVarNameInTable="columnAuthor" type="xs:boolean" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -456,16 +456,19 @@ SELECT TG_ID, Firstname, Lastname, Author FROM Users WHERE (TG_ID = @TG_ID)</Com
       <xs:selector xpath=".//mstns:Users" />
       <xs:field xpath="mstns:TG_ID" />
     </xs:unique>
+    <xs:keyref name="FK_Test_Keys_Tests" refer="Tests_Constraint1" msprop:rel_Generator_UserParentTable="Tests" msprop:rel_Generator_UserChildTable="Test_Keys" msprop:rel_Generator_RelationVarName="relationFK_Test_Keys_Tests" msprop:rel_Generator_UserRelationName="FK_Test_Keys_Tests" msprop:rel_Generator_ChildPropName="GetTest_KeysRows" msprop:rel_Generator_ParentPropName="TestsRow">
+      <xs:selector xpath=".//mstns:Test_Keys" />
+      <xs:field xpath="mstns:Test_ID" />
+    </xs:keyref>
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="FK_Answers_Questions" msdata:parent="Questions" msdata:child="Answers" msdata:parentkey="ID" msdata:childkey="Question_ID" msprop:Generator_UserParentTable="Questions" msprop:Generator_UserChildTable="Answers" msprop:Generator_RelationVarName="relationFK_Answers_Questions" msprop:Generator_UserRelationName="FK_Answers_Questions" msprop:Generator_ChildPropName="GetAnswersRows" msprop:Generator_ParentPropName="QuestionsRow" />
-      <msdata:Relationship name="FK_Answers_Test_Keys" msdata:parent="Test_Keys" msdata:child="Answers" msdata:parentkey="ID" msdata:childkey="Test_Key_ID" msprop:Generator_UserParentTable="Test_Keys" msprop:Generator_UserChildTable="Answers" msprop:Generator_RelationVarName="relationFK_Answers_Test_Keys" msprop:Generator_UserRelationName="FK_Answers_Test_Keys" msprop:Generator_ChildPropName="GetAnswersRows" msprop:Generator_ParentPropName="Test_KeysRow" />
-      <msdata:Relationship name="FK_Answers_Users" msdata:parent="Users" msdata:child="Answers" msdata:parentkey="TG_ID" msdata:childkey="User_ID" msprop:Generator_UserParentTable="Users" msprop:Generator_UserChildTable="Answers" msprop:Generator_RelationVarName="relationFK_Answers_Users" msprop:Generator_UserRelationName="FK_Answers_Users" msprop:Generator_ChildPropName="GetAnswersRows" msprop:Generator_ParentPropName="UsersRow" />
-      <msdata:Relationship name="FK_Questions_Tests" msdata:parent="Tests" msdata:child="Questions" msdata:parentkey="ID" msdata:childkey="Test_ID" msprop:Generator_UserParentTable="Tests" msprop:Generator_UserChildTable="Questions" msprop:Generator_RelationVarName="relationFK_Questions_Tests" msprop:Generator_UserRelationName="FK_Questions_Tests" msprop:Generator_ChildPropName="GetQuestionsRows" msprop:Generator_ParentPropName="TestsRow" />
-      <msdata:Relationship name="FK_Test_Keys_Tests" msdata:parent="Tests" msdata:child="Test_Keys" msdata:parentkey="ID" msdata:childkey="Test_ID" msprop:Generator_UserParentTable="Tests" msprop:Generator_UserChildTable="Test_Keys" msprop:Generator_RelationVarName="relationFK_Test_Keys_Tests" msprop:Generator_UserRelationName="FK_Test_Keys_Tests" msprop:Generator_ChildPropName="GetTest_KeysRows" msprop:Generator_ParentPropName="TestsRow" />
-      <msdata:Relationship name="FK_Test_Keys_Users" msdata:parent="Users" msdata:child="Test_Keys" msdata:parentkey="TG_ID" msdata:childkey="User_ID" msprop:Generator_UserParentTable="Users" msprop:Generator_UserChildTable="Test_Keys" msprop:Generator_RelationVarName="relationFK_Test_Keys_Users" msprop:Generator_UserRelationName="FK_Test_Keys_Users" msprop:Generator_ChildPropName="GetTest_KeysRows" msprop:Generator_ParentPropName="UsersRow" />
-      <msdata:Relationship name="FK_Tests_Users" msdata:parent="Users" msdata:child="Tests" msdata:parentkey="TG_ID" msdata:childkey="Author_ID" msprop:Generator_UserParentTable="Users" msprop:Generator_UserChildTable="Tests" msprop:Generator_RelationVarName="relationFK_Tests_Users" msprop:Generator_UserRelationName="FK_Tests_Users" msprop:Generator_ChildPropName="GetTestsRows" msprop:Generator_ParentPropName="UsersRow" />
+      <msdata:Relationship name="FK_Answers_Questions" msdata:parent="Questions" msdata:child="Answers" msdata:parentkey="ID" msdata:childkey="Question_ID" msprop:Generator_UserParentTable="Questions" msprop:Generator_UserChildTable="Answers" msprop:Generator_RelationVarName="relationFK_Answers_Questions" msprop:Generator_ChildPropName="GetAnswersRows" msprop:Generator_ParentPropName="QuestionsRow" msprop:Generator_UserRelationName="FK_Answers_Questions" />
+      <msdata:Relationship name="FK_Answers_Test_Keys" msdata:parent="Test_Keys" msdata:child="Answers" msdata:parentkey="ID" msdata:childkey="Test_Key_ID" msprop:Generator_UserParentTable="Test_Keys" msprop:Generator_UserChildTable="Answers" msprop:Generator_RelationVarName="relationFK_Answers_Test_Keys" msprop:Generator_ChildPropName="GetAnswersRows" msprop:Generator_ParentPropName="Test_KeysRow" msprop:Generator_UserRelationName="FK_Answers_Test_Keys" />
+      <msdata:Relationship name="FK_Answers_Users" msdata:parent="Users" msdata:child="Answers" msdata:parentkey="TG_ID" msdata:childkey="User_ID" msprop:Generator_UserParentTable="Users" msprop:Generator_UserChildTable="Answers" msprop:Generator_RelationVarName="relationFK_Answers_Users" msprop:Generator_ChildPropName="GetAnswersRows" msprop:Generator_ParentPropName="UsersRow" msprop:Generator_UserRelationName="FK_Answers_Users" />
+      <msdata:Relationship name="FK_Questions_Tests" msdata:parent="Tests" msdata:child="Questions" msdata:parentkey="ID" msdata:childkey="Test_ID" msprop:Generator_UserParentTable="Tests" msprop:Generator_UserChildTable="Questions" msprop:Generator_RelationVarName="relationFK_Questions_Tests" msprop:Generator_ChildPropName="GetQuestionsRows" msprop:Generator_ParentPropName="TestsRow" msprop:Generator_UserRelationName="FK_Questions_Tests" />
+      <msdata:Relationship name="FK_Test_Keys_Users" msdata:parent="Users" msdata:child="Test_Keys" msdata:parentkey="TG_ID" msdata:childkey="User_ID" msprop:Generator_UserParentTable="Users" msprop:Generator_UserChildTable="Test_Keys" msprop:Generator_RelationVarName="relationFK_Test_Keys_Users" msprop:Generator_ChildPropName="GetTest_KeysRows" msprop:Generator_ParentPropName="UsersRow" msprop:Generator_UserRelationName="FK_Test_Keys_Users" />
+      <msdata:Relationship name="FK_Tests_Users" msdata:parent="Users" msdata:child="Tests" msdata:parentkey="TG_ID" msdata:childkey="Author_ID" msprop:Generator_UserParentTable="Users" msprop:Generator_UserChildTable="Tests" msprop:Generator_RelationVarName="relationFK_Tests_Users" msprop:Generator_ChildPropName="GetTestsRows" msprop:Generator_ParentPropName="UsersRow" msprop:Generator_UserRelationName="FK_Tests_Users" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

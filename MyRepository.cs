@@ -25,7 +25,7 @@ namespace Console_TelegramBot
         {
             TestKey = key;
             List<Questions> _variants = MyDapper.GetList<Questions>(
-                SQLQueries.GetSingleQuestion,
+                SQLQueries.GetListQuestions,
                 MyDapper.GetSingle<TestKeys>(
                     SQLQueries.GetSingleTestKey, key).Test_ID);
 

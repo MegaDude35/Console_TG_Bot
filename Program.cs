@@ -6,7 +6,6 @@ namespace Console_TelegramBot
     {
         private static void Main()
         {
-            Console.Title = "Console TG Bot";
             new TelegramBotAPI();
             while (Console.ReadKey().Key != ConsoleKey.Q)
             {

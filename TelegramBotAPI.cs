@@ -14,9 +14,11 @@ namespace Console_TelegramBot
     {
         private static readonly Dictionary<long, MyRepository> testUsers = new();
 
-        public TelegramBotAPI()
+        private static readonly ITelegramBotClient bot;
+
+        static TelegramBotAPI()
         {
-            ITelegramBotClient bot = new TelegramBotClient(System.Configuration.ConfigurationManager.AppSettings["BotKey"]);
+            bot = new TelegramBotClient(System.Configuration.ConfigurationManager.AppSettings["BotKey"]);
             Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
             bot.StartReceiving(
@@ -34,7 +36,7 @@ namespace Console_TelegramBot
             );
         }
 
-        private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        private static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             if (update.Type == UpdateType.PollAnswer)
             {
@@ -78,7 +80,8 @@ namespace Console_TelegramBot
 
             Console.WriteLine(update.Message.Text);
             var command = update.Message.Text.Split(' ');
-            try {
+            try
+            {
                 switch (command[0])
                 {
                     case "/start":
@@ -104,6 +107,7 @@ namespace Console_TelegramBot
                             update.Message.Chat.Id,
                             @"Справка:
 /start - Запуск бота
+/help - Справка
 /start_test - Запуск теста
 /schedule_test - Запланировать тест (в разработке)
 /add_test - Добавить тест (только для роли ""Автор"")
@@ -140,20 +144,13 @@ namespace Console_TelegramBot
 
                     case "/add_test":
                         {
-                            if (MyRepository.GetAuthor(update.Message.Chat.Id))
-                            {
-                                await botClient.SendTextMessageAsync(
-                                    update.Message.Chat,
-                                    "Отправьте мне файл в формате Aiken для загрузки вопросов",
-                                    cancellationToken: cancellationToken);
-                            }
-                            else
-                            {
-                                await botClient.SendTextMessageAsync(
-                                    update.Message.Chat,
-                                    "Данный функционал недоступен.\nЕсли вы считаете что это неправильно, свяжитесь с администратором",
-                                    cancellationToken: cancellationToken);
-                            }
+                            await botClient.SendTextMessageAsync(
+                                update.Message.Chat,
+                                MyRepository.GetAuthor(update.Message.Chat.Id) ?
+                                "Отправьте мне файл в формате Aiken для загрузки вопросов"
+                                :
+                                "Данный функционал недоступен.\nЕсли вы считаете что это неправильно, свяжитесь с администратором",
+                                cancellationToken: cancellationToken);
                             break;
                         }
 
@@ -229,8 +226,8 @@ namespace Console_TelegramBot
                         }
                 }
             }
-            catch (RequestException) 
-            { 
+            catch (RequestException)
+            {
                 return;
             }
         }
@@ -282,8 +279,9 @@ namespace Console_TelegramBot
                 user.GetQuestion(r),
                 user.GetVariant(r),
                 false,
-                PollType.Quiz,
+                PollType.Regular,
                 false,
+
                 cancellationToken: cancellationToken
                 );
             }
