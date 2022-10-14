@@ -78,7 +78,7 @@ namespace Console_TelegramBot
                 return;
             }
 
-            Console.WriteLine(update.Message.Text);
+            Console.WriteLine($"{update.Message.Chat.FirstName} ({update.Message.Chat.Id}): {update.Message.Text}");
             var command = update.Message.Text.Split(' ');
             try
             {
@@ -134,6 +134,7 @@ namespace Console_TelegramBot
                             {
                                 //TODO
                                 //MyRepository.SheduleTest();
+                                await botClient.SendTextMessageAsync(update.Message.Chat, "В разработке. Пока что планирование делает автор теста.", cancellationToken: cancellationToken);
                             }
                             else
                             {
@@ -281,7 +282,6 @@ namespace Console_TelegramBot
                 false,
                 PollType.Regular,
                 false,
-
                 cancellationToken: cancellationToken
                 );
             }

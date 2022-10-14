@@ -28,6 +28,11 @@
                 select *
                 from Tests;";
 
+            public static string GetListTestsByName => @"
+                select *
+                from Tests
+                where Name like @param1;";
+
             public static string GetListQuestions => @"
                 select *
                 from Questions

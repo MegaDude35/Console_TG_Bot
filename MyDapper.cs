@@ -33,6 +33,10 @@ namespace Console_TelegramBot
             public static int SaveTest(List<Questions> questions, string testName, short TimeToTake, long TG_ID)
             {
                 conn.Open();
+                if (!(GetList<Tests>(SQLQueries.GetListTestsByName, testName).Count > 0))
+                {
+                    return 0;
+                }
                 int testID = conn.ExecuteScalar<int>(@"
                     insert into Tests(Name, Time_to_Take, Author_ID)
                     output inserted.ID
